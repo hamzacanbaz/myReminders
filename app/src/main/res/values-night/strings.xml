@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyReminders</string>
+
+    <!--Reminders Fragment-->
+    <string name="fab_add_reminder">add_reminder</string>
+
+    <!-- Add Reminder Fragment -->
+    <string name="add_reminder_title">Title</string>
+
+</resources>
