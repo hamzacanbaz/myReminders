@@ -7,5 +7,6 @@
 
     <!-- Add Reminder Fragment -->
     <string name="add_reminder_title">Title</string>
+    <string name="save">Save</string>
 
 </resources>

@@ -6,11 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "reminder_table")
 data class Reminder(
-
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id:Long,
+    val id: Long? = null,
 
     @ColumnInfo(name = "text")
-    val text:String
+    val title: String,
+
+    @ColumnInfo(name = "date")
+    val date: String = ""
+
+
 )

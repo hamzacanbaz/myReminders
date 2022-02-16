@@ -12,12 +12,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @DelicateCoroutinesApi
-class RemindersViewModel(private val repository: ReminderRepository, private val sharedPrefRepository: SharedPrefRepository): ViewModel() {
+class RemindersViewModel(
+    private val repository: ReminderRepository,
+    private val sharedPrefRepository: SharedPrefRepository
+) : ViewModel() {
 
-    val reminderList : LiveData<List<Reminder>> = getAllReminders()
-//    private val mShowProgressBarUserInfo: MutableLiveData<Boolean> = MutableLiveData(true)
+    val reminderList: LiveData<List<Reminder>> = getAllReminders()
+
+    //    private val mShowProgressBarUserInfo: MutableLiveData<Boolean> = MutableLiveData(true)
 //    val showProgressBarUserInfo: LiveData<Boolean> get() = mShowProgressBarUserInfo
     var isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
+
 
     init {
         isLoading.value = true
@@ -36,36 +41,40 @@ class RemindersViewModel(private val repository: ReminderRepository, private val
         }
     }
 
-    private fun insertReminder(reminder:Reminder){
+    fun insertReminder(reminder: Reminder) {
         viewModelScope.launch {
             repository.insertReminder(reminder)
         }
     }
-    fun updateReminder(reminder:Reminder){
+
+    fun updateReminder(reminder: Reminder) {
         viewModelScope.launch {
             repository.updateReminder(reminder)
         }
     }
-    fun deleteReminder(reminder:Reminder){
+
+    fun deleteReminder(reminder: Reminder) {
         viewModelScope.launch {
             repository.deleteReminder(reminder)
         }
     }
-    fun deleteAllReminders(){
+
+    fun deleteAllReminders() {
         viewModelScope.launch {
             repository.deleteAllReminders()
         }
     }
+
     private fun getAllReminders(): LiveData<List<Reminder>> {
 //        mShowProgressBarUserInfo.postValue(false)
         return repository.getAllReminders()
     }
 
-    private fun getSavedDataFirstTime(): Boolean{
+    private fun getSavedDataFirstTime(): Boolean {
         return sharedPrefRepository.getDataFirstTime()
     }
 
-    private fun setSavedDataFirstTime(savedFirstTime: Boolean){
+    private fun setSavedDataFirstTime(savedFirstTime: Boolean) {
         sharedPrefRepository.setDataFirstTime(savedFirstTime)
     }
 }

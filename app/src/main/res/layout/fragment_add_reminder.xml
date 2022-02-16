@@ -8,8 +8,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:padding="@dimen/margin_16dp"
         tools:context=".ui.add_reminder.AddReminderFragment">
@@ -20,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/add_reminder_title"
-            android:theme="@style/TextInputLayoutStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -34,11 +37,13 @@
 
         <Button
             android:id="@+id/btn_select_date"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/borderButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/dp64"
             android:layout_marginTop="@dimen/margin_16dp"
             android:hint="@string/select_date"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/hint_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_title"
@@ -46,12 +51,13 @@
 
 
         <Button
-            android:id="@+id/containedButton"
+            android:id="@+id/btnSaveReminder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_24dp"
             android:layout_marginEnd="@dimen/margin_24dp"
-            android:text="Save"
+            android:text="@string/save"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
