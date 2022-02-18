@@ -11,6 +11,7 @@ import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.adapter.RemindersAdapter
 import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentRemindersBinding
+import com.canbazdev.myreminders.model.Reminder
 import com.canbazdev.myreminders.repository.ReminderRepository
 import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.ViewModelFactory
@@ -18,7 +19,8 @@ import com.canbazdev.myreminders.ui.base.BaseFragment
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders) {
+class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
+    RemindersAdapter.OnItemClickedListener {
 
     private lateinit var rvReminders: RecyclerView;
     private lateinit var remindersAdapter: RemindersAdapter
@@ -41,7 +43,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         rvReminders = binding.rvReminders
         rvReminders.layoutManager = linearLayoutManager
 
-        remindersAdapter = RemindersAdapter()
+        remindersAdapter = RemindersAdapter(this)
         binding.rvReminders.adapter = remindersAdapter
 
         binding.fabGoToAddReminder.setOnClickListener {
@@ -51,11 +53,17 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         viewModel.reminderList.observe(viewLifecycleOwner) {
             if (it != null && it.isNotEmpty())
                 viewModel.isLoading.value = false
-                remindersAdapter.setRemindersList(it)
+            remindersAdapter.setRemindersList(it)
         }
-        viewModel.isLoading.observe(viewLifecycleOwner){
-            if(!it) progressBar.visibility=View.GONE
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (!it) progressBar.visibility = View.GONE
         }
+    }
+
+    override fun onItemClicked(position: Int, reminder: Reminder) {
+        val action =
+            RemindersFragmentDirections.actionReminderFragmentToDetailReminderFragment(reminder)
+        findNavController().navigate(action)
     }
 
 }

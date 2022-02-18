@@ -9,15 +9,27 @@
         android:id="@+id/reminderFragment"
         android:name="com.canbazdev.myreminders.ui.main.RemindersFragment"
         android:label="ReminderFragment"
-        tools:layout="@layout/fragment_reminders"
-        >
+        tools:layout="@layout/fragment_reminders">
         <action
             android:id="@+id/action_reminderFragment_to_addReminderFragment"
             app:destination="@id/addReminderFragment" />
+        <action
+            android:id="@+id/action_reminderFragment_to_detailReminderFragment"
+            app:destination="@id/detailReminderFragment" />
     </fragment>
     <fragment
         android:id="@+id/addReminderFragment"
         android:name="com.canbazdev.myreminders.ui.add_reminder.AddReminderFragment"
         android:label="AddReminder"
         tools:layout="@layout/fragment_add_reminder" />
+    <fragment
+        android:id="@+id/detailReminderFragment"
+        android:name="com.canbazdev.myreminders.ui.detail_reminder.DetailReminderFragment"
+        android:label="DetailReminderFragment"
+        tools:layout="@layout/fragment_detail_reminder">
+        <argument
+            android:name="reminder"
+            app:argType="com.canbazdev.myreminders.model.Reminder"
+            app:nullable="true" />
+    </fragment>
 </navigation>

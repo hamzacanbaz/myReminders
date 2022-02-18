@@ -28,5 +28,11 @@
         <item name="colorOnSurface">@android:color/black</item>
     </style>
 
+    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyReminders</item>
+
+    </style>
 
 </resources>

@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.canbazdev.myreminders.databinding.RowItemReminderBinding
+import com.canbazdev.myreminders.databinding.ItemReminderBinding
 import com.canbazdev.myreminders.model.Reminder
 
 class RemindersAdapter(
-
+    private val listener: OnItemClickedListener
 ) :
     RecyclerView.Adapter<RemindersAdapter.ReminderViewHolder>() {
 
@@ -22,28 +22,29 @@ class RemindersAdapter(
 
     }
 
-    inner class ReminderViewHolder(private val binding: RowItemReminderBinding) :
-        RemindersAdapter.BaseViewHolder<Reminder>(binding.root) {
+    inner class ReminderViewHolder(private val binding: ItemReminderBinding) :
+        RemindersAdapter.BaseViewHolder<Reminder>(binding.root), View.OnClickListener {
 
-        //        init {
-//            itemView.setOnClickListener(this)
-//        }
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         override fun bind(item: Reminder) {
             binding.tvReminder.text = item.title
         }
 
-//        override fun onClick(p0: View?) {
-//            val position = adapterPosition
-//            if (position != RecyclerView.NO_POSITION) {
-//                listener.onItemClicked(position, NAME)
-//            }
-//        }
+        override fun onClick(p0: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClicked(position, remindersList[position])
+            }
+        }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = RowItemReminderBinding.inflate(inflater, parent, false)
+        val binding = ItemReminderBinding.inflate(inflater, parent, false)
         return ReminderViewHolder(binding)
     }
 
@@ -62,6 +63,11 @@ class RemindersAdapter(
         holder.bind(remindersList[position])
 
     }
+
+    interface OnItemClickedListener {
+        fun onItemClicked(position: Int, reminder: Reminder)
+    }
+
 
 }
 

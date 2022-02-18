@@ -12,7 +12,9 @@
 
         <activity
             android:name="com.canbazdev.myreminders.ui.main.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.CustomSplashScreenTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

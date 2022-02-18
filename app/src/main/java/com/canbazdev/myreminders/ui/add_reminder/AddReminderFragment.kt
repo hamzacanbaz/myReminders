@@ -2,6 +2,7 @@ package com.canbazdev.myreminders.ui.add_reminder
 
 import android.content.Context
 import android.os.Bundle
+import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,6 +17,8 @@ import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -26,7 +29,8 @@ import java.util.*
 class AddReminderFragment :
     BaseFragment<FragmentAddReminderBinding>(R.layout.fragment_add_reminder) {
 
-    private lateinit var pickedDate: String
+    private var pickedDate: String = ""
+    private var pickedEventTime: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,22 +47,40 @@ class AddReminderFragment :
             view.hideKeyboard()
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
+                    .setTitleText(getString(R.string.select_date))
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                     .build()
 
             datePicker.showNow(parentFragmentManager, "")
+
             datePicker.addOnPositiveButtonClickListener {
-//                val currentDate = getCurrentDateWithNormalFormat()
-//                val reminderDate = datePickerFormatToNormalFormat(datePicker.headerText.toString())
-//                val df: DateFormat = SimpleDateFormat("dd/MM/yyyy/HH/mm/ss", Locale.US)
-//                val x = df.parse(reminderDate)
-//                val y = df.parse(currentDate)
-//                println("$x $y")
+                val currentDate = getCurrentDateWithNormalFormat()
+                val reminderDate = datePickerFormatToNormalFormat(datePicker.headerText.toString())
+
+//                findDateDifference(currentDate, reminderDate)
                 binding.btnSelectDate.text = datePicker.headerText.toString()
                 pickedDate = datePicker.headerText.toString()
 
             }
+        }
+        binding.btnSelectTime.setOnClickListener {
+            val systemHourFormat = getSystemHourFormat()
+            val timePicker = MaterialTimePicker.Builder()
+                .setTimeFormat(systemHourFormat)
+                .setHour(12)
+                .setMinute(10)
+                .setTitleText(getString(R.string.select_event_time))
+                .build()
+
+
+            timePicker.showNow(parentFragmentManager, "")
+
+            timePicker.addOnPositiveButtonClickListener {
+                binding.btnSelectTime.text = "${timePicker.hour} : ${timePicker.minute}"
+                pickedEventTime = "${timePicker.hour} : ${timePicker.minute}"
+
+            }
+
         }
 
         binding.etTitle.setOnFocusChangeListener { _, hasFocus ->
@@ -66,13 +88,24 @@ class AddReminderFragment :
         }
 
         binding.btnSaveReminder.setOnClickListener {
-            if (binding.etTitle.text != null && pickedDate.isNotEmpty()) {
+
+            if (binding.etTitle.text.isNullOrBlank()) {
+                showLongToast(getString(R.string.reminder_title_not_be_empty))
+            } else if (pickedDate.isEmpty()) {
+                // TODO selected date should be after today
+                showLongToast(getString(R.string.reminder_date_not_be_empty))
+            } else if (pickedEventTime.isEmpty()) {
+                showLongToast(getString(R.string.reminder_time_not_be_empty))
+            } else {
                 viewModel.insertReminder(
                     Reminder(
-                        title = binding.etTitle.text.toString(),
-                        date = pickedDate
+                        title = binding.etTitle.text.toString().trim(),
+                        date = pickedDate,
+                        time = pickedEventTime
                     )
                 )
+                showShortToast(getString(R.string.saved))
+                clearInputAreas()
             }
         }
 
@@ -86,45 +119,43 @@ class AddReminderFragment :
     }
 
     private fun datePickerFormatToNormalFormat(text: String): String {
-        val inputPattern = "MMM dd, yyyy"
-        val outputPattern = "dd/MM/yyyy"
-        val inputFormat = SimpleDateFormat(inputPattern, Locale.US)
-        val outputFormat = SimpleDateFormat(outputPattern, Locale.US)
 
+        val inputFormat = SimpleDateFormat(R.string.input_date_format.toString(), Locale.US)
+        val outputFormat = SimpleDateFormat(R.string.output_date_format.toString(), Locale.US)
         var date: Date? = null
-        var str: String? = " "
+        var outputDate: String? = " "
 
         try {
             date = inputFormat.parse(text)
-            str = outputFormat.format(date!!)
-            Log.e("Log ", "str $str")
+            outputDate = outputFormat.format(date!!)
+            Log.e("Log ", "str $outputDate")
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        return "$str/00/00/00"
+        return "$outputDate/00/00/00"
 
     }
 
     private fun getCurrentDateWithNormalFormat(): String {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy/HH/mm/ss", Locale.US);
+        val dateFormat =
+            SimpleDateFormat(R.string.input_date_format_with_hours.toString(), Locale.US);
         return dateFormat.format(Date())
 
     }
 
-
-    private fun getWeeksDifference(fromDate: Date?, toDate: Date?): Int {
-        return if (fromDate == null || toDate == null) 0
-        else ((toDate.time - fromDate.time) / (1000 * 60 * 60 * 24 * 7)).toInt()
+    private fun getSystemHourFormat(): Int {
+        val isSystem24Hour = is24HourFormat(context)
+        return if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
     }
 
-    private fun getDaysDifference(fromDate: Date?, toDate: Date?): Int {
-        return if (fromDate == null || toDate == null) 0
-        else ((toDate.time - fromDate.time) / (1000 * 60 * 60 * 24)).toInt()
+    private fun clearInputAreas() {
+        binding.btnSelectTime.text = ""
+        binding.btnSelectDate.text = ""
+        binding.etTitle.setText("")
+        binding.etTitle.clearFocus()
+        pickedDate = ""
+        pickedDate = ""
     }
 
-    private fun getHoursDifference(fromDate: Date?, toDate: Date?): Int {
-        return if (fromDate == null || toDate == null) 0
-        else ((toDate.time - fromDate.time) / (1000 * 60 * 60)).toInt() % 24
-    }
 
 }

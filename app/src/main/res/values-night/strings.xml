@@ -8,5 +8,9 @@
     <!-- Add Reminder Fragment -->
     <string name="add_reminder_title">Title</string>
     <string name="save">Save</string>
+    <string name="select_time">Select Time</string>
+    <string name="reminder_title_not_be_empty">Reminder title should not be empty</string>
+    <string name="saved">Saved</string>
+    <string name="reminder_date_not_be_empty">Reminder date not be empty</string>
 
 </resources>

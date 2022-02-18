@@ -1,9 +1,9 @@
 package com.canbazdev.myreminders.adapter
 
-import com.canbazdev.myreminders.databinding.RowItemReminderBinding
+import com.canbazdev.myreminders.databinding.ItemReminderBinding
 import com.canbazdev.myreminders.model.Reminder
 
-class RemindViewHolder(private val binding: RowItemReminderBinding) :
+class RemindViewHolder(private val binding: ItemReminderBinding) :
     RemindersAdapter.BaseViewHolder<Reminder>(binding.root) {
 
     //        init {

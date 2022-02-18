@@ -50,6 +50,7 @@ dependencies {
     def room_compiler_version = "1.1.1"
     def nav_version = "2.4.1"
     def retrofit_version = "2.9.0"
+    def splashscreen_version = "1.0.0-beta01"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -83,7 +84,11 @@ dependencies {
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
+    // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+
+    // Splash Screen
+    implementation "androidx.core:core-splashscreen:$splashscreen_version"
 
 
 
