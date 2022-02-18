@@ -17,8 +17,23 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.RemindersFragment">
 
+        <TextView
+            android:id="@+id/noDataFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data_found"
+            android:textColor="@color/primary_dark"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold"
+            android:translationZ="1dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ProgressBar
-            android:id="@+id/pb_loading_data"
+            android:id="@+id/pbLoadingData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

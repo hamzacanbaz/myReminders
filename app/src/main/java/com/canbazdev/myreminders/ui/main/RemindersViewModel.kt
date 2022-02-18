@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.canbazdev.myreminders.model.Reminder
 import com.canbazdev.myreminders.repository.ReminderRepository
 import com.canbazdev.myreminders.repository.SharedPrefRepository
+import com.canbazdev.myreminders.util.Event
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,6 +17,12 @@ class RemindersViewModel(
     private val repository: ReminderRepository,
     private val sharedPrefRepository: SharedPrefRepository
 ) : ViewModel() {
+
+    private val _statusMessage = MutableLiveData<Event<String>>()
+
+    val toastMessage: LiveData<Event<String>>
+        get() = _statusMessage
+
 
     val reminderList: LiveData<List<Reminder>> = getAllReminders()
 
@@ -51,6 +58,7 @@ class RemindersViewModel(
         viewModelScope.launch {
             repository.updateReminder(reminder)
         }
+        _statusMessage.value = Event("Reminder updated")
     }
 
     fun deleteReminder(reminder: Reminder) {

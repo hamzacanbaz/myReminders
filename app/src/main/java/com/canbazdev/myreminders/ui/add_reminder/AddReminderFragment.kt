@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentAddReminderBinding
@@ -106,10 +107,15 @@ class AddReminderFragment :
                 )
                 showShortToast(getString(R.string.saved))
                 clearInputAreas()
+                goToRemindersFromAddReminderFragment()
             }
         }
 
 
+    }
+
+    private fun goToRemindersFromAddReminderFragment() {
+        findNavController().navigate(R.id.action_addReminderFragment_to_reminderFragment)
     }
 
     private fun View.hideKeyboard() {

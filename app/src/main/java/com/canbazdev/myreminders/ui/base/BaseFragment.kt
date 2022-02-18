@@ -38,6 +38,7 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         _binding = null
     }
 
+
     fun showShortToast(displayedText: String) {
         return Toast.makeText(context, displayedText, Toast.LENGTH_SHORT).show()
     }

@@ -51,9 +51,13 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         }
 
         viewModel.reminderList.observe(viewLifecycleOwner) {
-            if (it != null && it.isNotEmpty())
+            if (it != null && it.isNotEmpty()) {
                 viewModel.isLoading.value = false
-            remindersAdapter.setRemindersList(it)
+                remindersAdapter.setRemindersList(it)
+            } else {
+                binding.noDataFound.setVisibility(View.VISIBLE)
+                progressBar.visibility = View.GONE
+            }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (!it) progressBar.visibility = View.GONE

@@ -11,13 +11,12 @@ data class Reminder(
     val id: Long? = null,
 
     @ColumnInfo(name = "text")
-    val title: String,
+    var title: String,
 
     @ColumnInfo(name = "date")
-    val date: String = "",
+    var date: String = "",
 
     @ColumnInfo(name = "time")
-    val time: String = ""
-
+    var time: String = ""
 
 ) : Serializable

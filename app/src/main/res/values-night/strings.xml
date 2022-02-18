@@ -12,5 +12,8 @@
     <string name="reminder_title_not_be_empty">Reminder title should not be empty</string>
     <string name="saved">Saved</string>
     <string name="reminder_date_not_be_empty">Reminder date not be empty</string>
+    <string name="delete">delete</string>
+    <string name="update">Update</string>
+    <string name="no_data_found">No Data Found</string>
 
 </resources>
