@@ -8,7 +8,12 @@ import com.canbazdev.myreminders.model.Reminder
 interface ReminderDao {
 
     @Query("SELECT * FROM reminder_table ORDER BY text ASC")
-    fun getAllReminders():LiveData<List<Reminder>>
+    fun getAllReminders(): LiveData<List<Reminder>>
+
+    @Query("SELECT * FROM reminder_table WHERE date =:currentDate")
+    fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>>
+
+    // TODO Get closest reminder
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReminder(reminder: Reminder)

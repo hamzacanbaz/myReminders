@@ -13,6 +13,9 @@ import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
+import com.canbazdev.myreminders.util.hideKeyboard
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
@@ -34,6 +37,51 @@ class DetailReminderFragment :
         args.let {
             binding.reminder = args.reminder
             binding.viewModel = viewModel
+        }
+        binding.btnSelectTime.setOnClickListener {
+            val formattedTime =
+                viewModel.splitTimeIntoHourAndMinute(binding.btnSelectTime.text.toString())
+            val systemHourFormat = getSystemHourFormat()
+            val timePicker = MaterialTimePicker.Builder()
+                .setTimeFormat(systemHourFormat)
+                .setHour(formattedTime.first)
+                .setMinute(formattedTime.second)
+                .setTitleText(getString(R.string.select_event_time))
+                .build()
+
+
+            timePicker.showNow(parentFragmentManager, "")
+
+            timePicker.addOnPositiveButtonClickListener {
+                binding.btnSelectTime.text = "${timePicker.hour} : ${timePicker.minute}"
+            }
+
+        }
+
+        binding.btnSelectDate.setOnClickListener {
+
+
+            view.hideKeyboard()
+            val reminderFormattedTime =
+                viewModel.getReminderDateFromFormatter(
+                    binding.btnSelectDate.text.toString(),
+                    getString(R.string.input_date_format)
+                )
+
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(getString(R.string.select_date))
+                    .setSelection(reminderFormattedTime)
+                    .build()
+
+            datePicker.showNow(parentFragmentManager, "")
+
+            datePicker.addOnPositiveButtonClickListener {
+
+//                findDateDifference(currentDate, reminderDate)
+                binding.btnSelectDate.text = datePicker.headerText.toString()
+
+            }
         }
 
 

@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
+import com.canbazdev.myreminders.adapter.ReminderDecoration
 import com.canbazdev.myreminders.adapter.RemindersAdapter
 import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentRemindersBinding
@@ -26,6 +27,8 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
     private lateinit var remindersAdapter: RemindersAdapter
     private lateinit var progressBar: ProgressBar
 
+    private var todayReminderNumber: Int = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressBar = binding.pbLoadingData
@@ -38,10 +41,12 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
             ViewModelFactory(repository, sharedPrefRepository)
         }
 
+
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         rvReminders = binding.rvReminders
         rvReminders.layoutManager = linearLayoutManager
+        rvReminders.addItemDecoration(ReminderDecoration())
 
         remindersAdapter = RemindersAdapter(this)
         binding.rvReminders.adapter = remindersAdapter
@@ -55,10 +60,23 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                 viewModel.isLoading.value = false
                 remindersAdapter.setRemindersList(it)
             } else {
-                binding.noDataFound.setVisibility(View.VISIBLE)
+                binding.noDataFound.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
             }
         }
+
+        viewModel.todaysReminderList.observe(viewLifecycleOwner) {
+
+            todayReminderNumber = it.size
+// TODO String placeholder olustur
+            if (todayReminderNumber != 0) {
+                binding.tvTodayReminderNumbers.text =
+                    "Today, you have $todayReminderNumber reminders."
+            } else {
+                binding.tvTodayReminderNumbers.text = "Today, you have no reminders."
+            }
+        }
+
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (!it) progressBar.visibility = View.GONE
         }

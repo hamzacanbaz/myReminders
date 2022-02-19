@@ -22,5 +22,7 @@
     <string name="delete">delete</string>
     <string name="update">Update</string>
     <string name="no_data_found">No Data Found</string>
+    <string name="close_button">close button</string>
+    <string name="bell">bell</string>
 
 </resources>

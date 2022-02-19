@@ -10,7 +10,7 @@ class RemindViewHolder(private val binding: ItemReminderBinding) :
 //            itemView.setOnClickListener(this)
 //        }
     override fun bind(item: Reminder) {
-        binding.tvReminder.text = item.title
+        binding.tvReminderTitle.text = item.title
     }
 
 //        override fun onClick(p0: View?) {

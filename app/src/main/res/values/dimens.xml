@@ -7,4 +7,5 @@
     <dimen name="margin_24dp">24dp</dimen>
     <dimen name="dp64">64dp</dimen>
     <dimen name="sp20">20sp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
 </resources>

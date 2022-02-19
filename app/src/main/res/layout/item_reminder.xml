@@ -1,22 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        tools:layout_margin="@dimen/margin_20dp">
+
+        <View
+            android:id="@+id/v_left_view"
+            android:layout_width="5dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginBottom="@dimen/margin_8dp"
+            android:background="@drawable/background_left_item_reminder_view"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_reminder"
-            android:layout_width="match_parent"
+            android:id="@id/tv_remider_date"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FFCA28"
-            android:padding="20dp"
-            />
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:fontFamily="@font/rubik3"
+            android:text="12 February"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/v_left_view"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_reminder_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
+            android:fontFamily="@font/rubik3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/v_left_view"
+            app:layout_constraintTop_toBottomOf="@+id/tv_remider_date"
+            tools:text="Choose a lesson for school" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

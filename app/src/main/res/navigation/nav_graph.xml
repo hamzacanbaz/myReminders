@@ -48,9 +48,9 @@
         <action
             android:id="@+id/action_detailReminderFragment_to_reminderFragment"
             app:destination="@id/reminderFragment"
-            app:enterAnim="@anim/exit_to_right"
-            app:exitAnim="@anim/exit_from_right"
-            app:popEnterAnim="@anim/exit_to_right"
-            app:popExitAnim="@anim/exit_from_right" />
+            app:enterAnim="@anim/exit_from_right"
+            app:exitAnim="@anim/exit_to_right"
+            app:popEnterAnim="@anim/exit_from_right"
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
 </navigation>

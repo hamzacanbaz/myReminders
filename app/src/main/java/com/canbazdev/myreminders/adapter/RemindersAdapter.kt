@@ -30,7 +30,8 @@ class RemindersAdapter(
         }
 
         override fun bind(item: Reminder) {
-            binding.tvReminder.text = item.title
+            binding.tvReminderTitle.text = item.title
+            binding.tvRemiderDate.text = item.date
         }
 
         override fun onClick(p0: View?) {
