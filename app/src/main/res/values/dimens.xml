@@ -8,4 +8,5 @@
     <dimen name="dp64">64dp</dimen>
     <dimen name="sp20">20sp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="sp24">24sp</dimen>
 </resources>

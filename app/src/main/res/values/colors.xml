@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#795548</color>
-    <color name="primary_light">#a78172</color>
-    <color name="primary_dark">#4a2b20</color>
+    <color name="primary">#66a2ea</color>
+    <color name="primary_light">#B3E5FC</color>
+    <color name="primary_dark">#4478db</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
@@ -10,6 +10,7 @@
     <color name="mtrl_textinput_default_box_stroke_color">@color/primary_light</color>
     <color name="hint_color">#666666</color>
     <color name="red">#B00020</color>
-    <color name="color_today_reminder">#B59A91</color>
+    <!--    <color name="color_today_reminder">#B59A91</color>-->
+    <color name="color_today_reminder">#8cb3ec</color>
 
 </resources>

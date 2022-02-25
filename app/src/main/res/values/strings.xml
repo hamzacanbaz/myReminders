@@ -9,6 +9,7 @@
     <string name="select_date">Select Date</string>
     <string name="save">Save</string>
     <string name="input_date_format">MMM dd, yyyy</string>
+    <string name="input_date_format_for_turkish">dd MMM yyyy</string>
     <string name="input_date_format_with_hours">dd/MM/yyyy/HH/mm/ss</string>
     <string name="output_date_format">dd/MM/yyyy</string>
     <string name="select_time">Select Time</string>
@@ -24,5 +25,6 @@
     <string name="no_data_found">No Data Found</string>
     <string name="close_button">close button</string>
     <string name="bell">bell</string>
+    <string name="today_reminder">Today Reminder</string>
 
 </resources>

@@ -12,12 +12,12 @@ class RemindersAdapter(
 ) :
     RecyclerView.Adapter<RemindersAdapter.ReminderViewHolder>() {
 
-    private var remindersList = ArrayList<Reminder>()
+    var remindersList = ArrayList<Reminder>()
 
     fun setRemindersList(list: List<Reminder>) {
         remindersList.clear()
         remindersList.addAll(list)
-        println(list.size)
+//        println(list.size)
         notifyDataSetChanged()
 
     }

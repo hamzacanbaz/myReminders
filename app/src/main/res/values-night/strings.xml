@@ -16,5 +16,7 @@
     <string name="update">Update</string>
     <string name="no_data_found">No Data Found</string>
     <string name="close_button">close button</string>
+    <string name="today_reminder">Today Reminder</string>
+    <string name="space">" "</string>
 
 </resources>

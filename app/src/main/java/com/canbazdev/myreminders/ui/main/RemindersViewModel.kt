@@ -1,5 +1,6 @@
 package com.canbazdev.myreminders.ui.main
 
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,10 +11,11 @@ import com.canbazdev.myreminders.repository.ReminderRepository
 import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.util.Event
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @DelicateCoroutinesApi
@@ -26,33 +28,27 @@ class RemindersViewModel(
 
     val toastMessage: LiveData<Event<String>>
         get() = _statusMessage
+    private val _savedName = MutableLiveData<String>()
+
+    val savedName: LiveData<String>
+        get() = _savedName
 
 
     val reminderList: LiveData<List<Reminder>> = getAllReminders()
     val todaysReminderList: LiveData<List<Reminder>> = getTodaysAllReminders(
         getCurrentDateWithNormalFormat()
     )
+    val closestReminderToday: LiveData<Reminder> =
+        getClosestReminderToday(getCurrentDateWithNormalFormat(), getCurrentTimeWithNormalFormat())
 
     //    private val mShowProgressBarUserInfo: MutableLiveData<Boolean> = MutableLiveData(true)
-//    val showProgressBarUserInfo: LiveData<Boolean> get() = mShowProgressBarUserInfo
+    //    val showProgressBarUserInfo: LiveData<Boolean> get() = mShowProgressBarUserInfo
     var isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
 
 
     init {
         isLoading.value = true
-        if (!getSavedDataFirstTime()) {
-            GlobalScope.launch {
-                repeat(3) {
-                    val reminder = Reminder(
-                        it.toLong(),
-                        "Yonunu bilmeyen gemiye hicbir ruzgar yardim etmez."
-                    )
-                    insertReminder(reminder)
-                }
-
-            }
-            setSavedDataFirstTime(true)
-        }
+        getNameFirstTime()
     }
 
     fun insertReminder(reminder: Reminder) {
@@ -90,12 +86,38 @@ class RemindersViewModel(
         return repository.getTodaysAllReminders(currentDate)
     }
 
+    private fun getClosestReminderToday(
+        currentDate: String,
+        currentTime: String
+    ): LiveData<Reminder> {
+//        mShowProgressBarUserInfo.postValue(false)
+        println(currentDate)
+        println(currentTime)
+        return repository.getClosestReminderToday(currentDate, currentTime)
+    }
+
     private fun getSavedDataFirstTime(): Boolean {
         return sharedPrefRepository.getDataFirstTime()
     }
 
     private fun setSavedDataFirstTime(savedFirstTime: Boolean) {
         sharedPrefRepository.setDataFirstTime(savedFirstTime)
+    }
+
+    fun getSavedNameFirstTime(): Boolean {
+        return sharedPrefRepository.getNameFirstTime()
+    }
+
+    fun setSavedNameFirstTime(savedFirstTime: Boolean) {
+        sharedPrefRepository.setNameFirstTime(savedFirstTime)
+    }
+
+    fun setNameFirstTime(nameText: String) {
+        sharedPrefRepository.setNameFirstText(nameText)
+    }
+
+    fun getNameFirstTime() {
+        _savedName.value = sharedPrefRepository.getNameFirstText()
     }
 
     fun splitDateStringIntoString(dateString: String): List<String> {
@@ -136,14 +158,24 @@ class RemindersViewModel(
         val hour = splittedTimeList[0].trim().toInt()
         val minute = splittedTimeList[1].trim().toInt()
         return Pair(hour, minute)
-
     }
 
     fun getCurrentDateWithNormalFormat(): String {
-
-        val dateFormat =
-            SimpleDateFormat("MMM dd, yyyy", Locale.US)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+//        println(dateFormat.format(Date()).toString())
         return dateFormat.format(Date())
+    }
+
+    fun getCurrentTimeWithNormalFormat(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val dtf = DateTimeFormatter.ofPattern("HH:mm")
+            val now: LocalDateTime = LocalDateTime.now()
+            dtf.format(now)
+        } else {
+            val formatter = SimpleDateFormat("HH:mm", Locale.US)
+            val date = Date()
+            formatter.format(date)
+        }
 
     }
 

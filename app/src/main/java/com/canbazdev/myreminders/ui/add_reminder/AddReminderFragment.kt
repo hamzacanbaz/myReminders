@@ -1,7 +1,9 @@
 package com.canbazdev.myreminders.ui.add_reminder
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.canbazdev.myreminders.R
@@ -14,9 +16,10 @@ import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.hideKeyboard
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.util.*
 
 
 @DelicateCoroutinesApi
@@ -25,6 +28,10 @@ class AddReminderFragment :
 
     private var pickedDate: String = ""
     private var pickedEventTime: String = ""
+    private val mcurrentTime: Calendar = Calendar.getInstance()
+    private val year = mcurrentTime.get(Calendar.YEAR)
+    private val month = mcurrentTime.get(Calendar.MONTH)
+    private val day = mcurrentTime.get(Calendar.DAY_OF_MONTH)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,30 +44,18 @@ class AddReminderFragment :
             ViewModelFactory(repository, sharedPrefRepository)
         }
 
-        binding.btnSelectDate.setOnClickListener {
+        val yourDatePicker =
+            datePickerBuilder(binding.tvDateDay, binding.tvDateYear, year, month, day)
+
+
+        binding.clDatePicker.setOnClickListener {
             view.hideKeyboard()
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText(getString(R.string.select_date))
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
-
-            datePicker.showNow(parentFragmentManager, "")
-
-            datePicker.addOnPositiveButtonClickListener {
-//                val currentDate = getCurrentDateWithNormalFormat()
-//                val reminderDate = datePickerFormatToNormalFormat(datePicker.headerText.toString())
-
-//                findDateDifference(currentDate, reminderDate)
-                binding.btnSelectDate.text = datePicker.headerText.toString()
-                pickedDate = datePicker.headerText.toString()
-
-            }
+            yourDatePicker.datePicker.minDate = mcurrentTime.timeInMillis
+            yourDatePicker.show()
         }
-        binding.btnSelectTime.setOnClickListener {
-            val systemHourFormat = getSystemHourFormat()
+        binding.clTimePicker.setOnClickListener {
             val timePicker = MaterialTimePicker.Builder()
-                .setTimeFormat(systemHourFormat)
+                .setTimeFormat(CLOCK_24H)
                 .setHour(12)
                 .setMinute(10)
                 .setTitleText(getString(R.string.select_event_time))
@@ -70,8 +65,14 @@ class AddReminderFragment :
             timePicker.showNow(parentFragmentManager, "")
 
             timePicker.addOnPositiveButtonClickListener {
-                binding.btnSelectTime.text = "${timePicker.hour} : ${timePicker.minute}"
-                pickedEventTime = "${timePicker.hour} : ${timePicker.minute}"
+                pickedEventTime = "${timePicker.hour}:${timePicker.minute}"
+//                binding.btnSelectTime.text = pickedEventTime
+                showTime(
+                    binding.tvTimeHour,
+                    binding.tvTimeMinute,
+                    timePicker.hour,
+                    timePicker.minute
+                )
 
             }
 
@@ -82,7 +83,6 @@ class AddReminderFragment :
         }
 
         binding.btnSaveReminder.setOnClickListener {
-            pickedDate
 
 
             if (binding.etTitle.text.isNullOrBlank()) {
@@ -96,7 +96,7 @@ class AddReminderFragment :
                 viewModel.insertReminder(
                     Reminder(
                         title = binding.etTitle.text.toString().trim(),
-                        date = pickedDate,
+                        date = formatDate(pickedDate),
                         time = pickedEventTime
                     )
                 )
@@ -113,12 +113,36 @@ class AddReminderFragment :
     }
 
     private fun clearInputAreas() {
-        binding.btnSelectTime.text = ""
-        binding.btnSelectDate.text = ""
+        binding.tvTimeHour.text = ""
+        binding.tvTimeMinute.text = ""
+        binding.tvDateDay.text = ""
+        binding.tvDateDay.text = ""
         binding.etTitle.setText("")
         binding.etTitle.clearFocus()
         pickedDate = ""
-        pickedDate = ""
+    }
+
+    private fun datePickerBuilder(
+        tvDay: TextView,
+        tvMonthAndYear: TextView,
+        myear: Int,
+        mmonth: Int,
+        mday: Int
+    ): DatePickerDialog {
+        return DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                val date = String.format(
+                    "%d/%d/%d",
+                    dayOfMonth,
+                    month + 1,
+                    year
+                )
+                showDate(tvDay, tvMonthAndYear, date)
+                pickedDate = date
+
+            }, myear, mmonth, mday
+        )
     }
 
 

@@ -3,6 +3,8 @@ package com.canbazdev.myreminders.repository
 import android.content.Context
 import android.content.SharedPreferences
 import com.canbazdev.myreminders.util.Constants.DATA_SAVED_FIRST_TIME
+import com.canbazdev.myreminders.util.Constants.NAME_FIRST_TIME
+import com.canbazdev.myreminders.util.Constants.NAME_SAVED_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.PREFERENCE_NAME
 
 class SharedPrefRepository(context: Context) {
@@ -39,11 +41,22 @@ class SharedPrefRepository(context: Context) {
 
     private fun String.getBoolean() = pref.getBoolean(this, false)
 
-    fun setDataFirstTime(savedFirstTime: Boolean){
+    fun setDataFirstTime(savedFirstTime: Boolean) {
         DATA_SAVED_FIRST_TIME.put(savedFirstTime)
     }
+
     fun getDataFirstTime(): Boolean = DATA_SAVED_FIRST_TIME.getBoolean()
 
-//    private val gson = Gson()
+    fun setNameFirstTime(savedFirstTime: Boolean) {
+        NAME_SAVED_FIRST_TIME.put(savedFirstTime)
+    }
+
+    fun getNameFirstTime(): Boolean = NAME_SAVED_FIRST_TIME.getBoolean()
+
+    fun setNameFirstText(savedName: String) {
+        NAME_FIRST_TIME.put(savedName)
+    }
+
+    fun getNameFirstText(): String = NAME_FIRST_TIME.getString()
 
 }

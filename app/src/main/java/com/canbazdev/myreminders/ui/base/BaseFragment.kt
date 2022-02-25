@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -24,9 +25,7 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
     private var _binding: DB? = null
     val binding: DB get() = _binding!!
 
-
     open fun DB.initialize() {}
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,15 +35,14 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         _binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.initialize()
-        return _binding!!.root
 
+        return _binding!!.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
     fun showShortToast(displayedText: String) {
         return Toast.makeText(context, displayedText, Toast.LENGTH_SHORT).show()
@@ -73,7 +71,77 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         } catch (e: ParseException) {
             e.printStackTrace()
         }
+
         return "$outputDate/00/00/00"
+    }
+
+//    fun showDate(textView: TextView, date: String) {
+//        val splitted = date.split("/")
+//        var newFormattedDateString = ""
+//        val day = splitted[0].toInt()
+//        val month = splitted[1].toInt()
+//        val year = splitted[2].toInt()
+//
+//        newFormattedDateString += if (day < 10) "0$day/" else "$day/"
+//        newFormattedDateString += if (month < 10) "0$month/" else "$month/"
+//
+//        newFormattedDateString += "$year"
+//        textView.text = newFormattedDateString
+//
+//    }
+
+    fun showDate(tvday: TextView, tvmonth: TextView, date: String) {
+
+        val splitted = date.split("/")
+        var day = splitted[0]
+        var month = splitted[1].toInt()
+        var monthText = ""
+        val year = splitted[2]
+
+        day = if (day.length < 2) "0$day" else day
+
+        when (month) {
+            1 -> monthText = "Jan"
+            2 -> monthText = "Feb"
+            3 -> monthText = "Mar"
+            4 -> monthText = "Apr"
+            5 -> monthText = "May"
+            6 -> monthText = "Jun"
+            7 -> monthText = "Jul"
+            8 -> monthText = "Aug"
+            9 -> monthText = "Sep"
+            10 -> monthText = "Oct"
+            11 -> monthText = "Nov"
+            12 -> monthText = "Dec"
+        }
+
+        tvday.text = day
+        tvmonth.text = "$monthText $year"
+
+    }
+
+    fun showTime(tvHour: TextView, tvMinute: TextView, hour: Int, minute: Int) {
+        val displayedHour: String = if (hour.toString().length < 2) "0$hour" else "$hour"
+        val displayedMinute: String = if (minute.toString().length < 2) "0$minute" else "$minute"
+
+        tvHour.text = displayedHour
+        tvMinute.text = displayedMinute
+
+
+    }
+
+    fun formatDate(date: String): String {
+        val splitted = date.split("/")
+        var newFormattedDateString = ""
+        val day = splitted[0].toInt()
+        val month = splitted[1].toInt()
+        val year = splitted[2].toInt()
+
+        newFormattedDateString += if (day < 10) "0$day/" else "$day/"
+        newFormattedDateString += if (month < 10) "0$month/" else "$month/"
+
+        newFormattedDateString += "$year"
+        return newFormattedDateString
 
     }
 

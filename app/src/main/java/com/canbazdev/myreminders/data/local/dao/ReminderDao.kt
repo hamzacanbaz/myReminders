@@ -10,10 +10,11 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder_table ORDER BY text ASC")
     fun getAllReminders(): LiveData<List<Reminder>>
 
-    @Query("SELECT * FROM reminder_table WHERE date =:currentDate")
+    @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY time ASC")
     fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>>
 
-    // TODO Get closest reminder
+    @Query("SELECT * FROM reminder_table WHERE date =:currentDate AND time>:currentTime ORDER BY time ASC LIMIT 1")
+    fun getClosestReminderToday(currentDate: String, currentTime: String): LiveData<Reminder>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReminder(reminder: Reminder)

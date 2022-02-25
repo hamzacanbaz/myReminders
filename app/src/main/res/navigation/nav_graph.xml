@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/reminderFragment">
+    app:startDestination="@id/firstFragment">
 
     <fragment
         android:id="@+id/reminderFragment"
@@ -52,5 +52,14 @@
             app:exitAnim="@anim/exit_to_right"
             app:popEnterAnim="@anim/exit_from_right"
             app:popExitAnim="@anim/exit_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/firstFragment"
+        android:name="com.canbazdev.myreminders.ui.onboarding.OnBoardingFragment"
+        android:label="FirstFragment"
+        tools:layout="@layout/fragment_onboarding_first">
+        <action
+            android:id="@+id/action_firstFragment_to_reminderFragment"
+            app:destination="@id/reminderFragment" />
     </fragment>
 </navigation>
