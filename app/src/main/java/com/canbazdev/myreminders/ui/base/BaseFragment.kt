@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.canbazdev.myreminders.R
+import com.canbazdev.myreminders.util.enum.Months
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.text.ParseException
@@ -94,26 +95,12 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
 
         val splitted = date.split("/")
         var day = splitted[0]
-        var month = splitted[1].toInt()
+        val month = splitted[1].toInt()
         var monthText = ""
         val year = splitted[2]
 
         day = if (day.length < 2) "0$day" else day
-
-        when (month) {
-            1 -> monthText = "Jan"
-            2 -> monthText = "Feb"
-            3 -> monthText = "Mar"
-            4 -> monthText = "Apr"
-            5 -> monthText = "May"
-            6 -> monthText = "Jun"
-            7 -> monthText = "Jul"
-            8 -> monthText = "Aug"
-            9 -> monthText = "Sep"
-            10 -> monthText = "Oct"
-            11 -> monthText = "Nov"
-            12 -> monthText = "Dec"
-        }
+        monthText = Months.values()[month - 1].toString()
 
         tvday.text = day
         tvmonth.text = "$monthText $year"

@@ -26,5 +26,15 @@
     <string name="close_button">close button</string>
     <string name="bell">bell</string>
     <string name="today_reminder">Today Reminder</string>
+    <string name="select_category">Select Category</string>
+
+    <string-array name="categories">
+        <item>Work</item>
+        <item>School</item>
+        <item>Family</item>
+        <item>Home</item>
+        <item>Personal</item>
+        <item>Friend</item>
+    </string-array>
 
 </resources>

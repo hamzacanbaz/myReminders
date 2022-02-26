@@ -98,8 +98,12 @@ dependencies {
 
     // Sweer Alert Dialog
     implementation "cn.pedant.sweetalert:library:$sweet_alert_dialog"
-
     implementation 'com.irozon.alertview:alertview:1.0.1'
+
+    // Spinner Library
+    implementation "com.github.skydoves:powerspinner:1.1.9"
+
+
 
 
 }

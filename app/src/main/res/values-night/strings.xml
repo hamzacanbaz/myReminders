@@ -18,5 +18,6 @@
     <string name="close_button">close button</string>
     <string name="today_reminder">Today Reminder</string>
     <string name="space">" "</string>
+    <string name="select_category">Select Category</string>
 
 </resources>

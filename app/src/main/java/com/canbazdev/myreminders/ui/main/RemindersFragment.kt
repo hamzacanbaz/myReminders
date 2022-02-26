@@ -125,7 +125,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
     private fun setUpSwipeToDeleteReminders(viewModel: RemindersViewModel) {
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT,
             ItemTouchHelper.LEFT
         ) {
             override fun onMove(
