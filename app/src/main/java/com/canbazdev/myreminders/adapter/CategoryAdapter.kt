@@ -2,10 +2,13 @@ package com.canbazdev.myreminders.adapter
 
 // created by Hamza Canbaz
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.databinding.ItemThemeBinding
 import com.canbazdev.myreminders.model.Category
 
@@ -16,6 +19,7 @@ class CategoryAdapter(
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var categoriesList = ArrayList<Category>()
+
 
     fun setCategoriesListList(list: List<Category>) {
         categoriesList.clear()
@@ -34,14 +38,37 @@ class CategoryAdapter(
 
         override fun bind(item: Category) {
             binding.tvCategoryBackground.text = item.title
-            binding.tvCategoryBackground.background.setTint(item.color)
+            val backgroundOff: Drawable = binding.flCategoryBackground.background
+            backgroundOff.setTint(item.color)
+            binding.flCategoryBackground.background = backgroundOff
+
+
+            if (item.isSelected) {
+                val newBackground: Drawable = ResourcesCompat.getDrawable(
+                    itemView.resources,
+                    R.drawable.bg_select_category_with_border,
+                    null
+                )!!
+                binding.tvCategoryBackground.background = newBackground
+            } else {
+                binding.tvCategoryBackground.background = null
+            }
 
         }
 
-        override fun onClick(p0: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClicked(position, categoriesList[position])
+
+        override fun onClick(view: View?) {
+            if (!categoriesList[layoutPosition].isSelected) {
+                deleteAllItemBackgrounds()
+                categoriesList[layoutPosition].isSelected = true
+                notifyDataSetChanged()
+            } else {
+                categoriesList[layoutPosition].isSelected = false
+                notifyDataSetChanged()
+            }
+
+            if (layoutPosition != RecyclerView.NO_POSITION) {
+                listener.onItemClicked(layoutPosition, categoriesList[layoutPosition])
             }
         }
 
@@ -53,8 +80,6 @@ class CategoryAdapter(
         return CategoryViewHolder(binding)
     }
 
-//    override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-//    }
 
     override fun getItemCount(): Int {
         return categoriesList.size
@@ -71,6 +96,12 @@ class CategoryAdapter(
 
     interface OnCategoryClickedListener {
         fun onItemClicked(position: Int, category: Category)
+    }
+
+    private fun deleteAllItemBackgrounds() {
+        categoriesList.forEach { category ->
+            category.isSelected = false
+        }
     }
 
 

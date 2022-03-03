@@ -7,19 +7,18 @@
     </data>
 
     <FrameLayout
-
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginBottom="@dimen/margin_8dp"
+        android:id="@+id/fl_category_background"
+        style="@style/CustomTextView"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_gravity="center_horizontal">
 
         <TextView
             android:id="@+id/tv_category_background"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_8dp"
-            android:layout_marginBottom="@dimen/margin_8dp"
-            android:background="@drawable/background_rounded"
-            android:backgroundTint="@color/primary_dark"
+            android:layout_width="100dp"
+            android:layout_height="32dp"
             android:gravity="center"
             android:paddingStart="@dimen/margin_16dp"
             android:paddingTop="@dimen/margin_8dp"

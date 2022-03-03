@@ -1,11 +1,16 @@
 package com.canbazdev.myreminders.ui.main
 
+import android.app.AlertDialog
+import android.appwidget.AppWidgetManager
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,8 +28,10 @@ import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
+
 
 @DelicateCoroutinesApi
 class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
@@ -62,6 +69,29 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
             findNavController().navigate(R.id.action_reminderFragment_to_addReminderFragment)
         }
 
+        binding.tvHelloName.setOnClickListener {
+
+            val layoutInflater = LayoutInflater.from(view.context)
+            val alertDialog: View = layoutInflater.inflate(R.layout.dialog_change_name, null)
+            val builder = AlertDialog.Builder(view.context).create()
+            val etAlertDialogName = alertDialog.findViewById<TextInputEditText>(R.id.et_name)
+            etAlertDialogName.setText(viewModel.savedName.value)
+
+            builder.setView(alertDialog)
+
+            alertDialog.findViewById<Button>(R.id.btn_save_name).setOnClickListener {
+                val name = etAlertDialogName.text.toString()
+                sharedPrefRepository.setNameFirstText(name)
+                showShortToast(getString(R.string.name_saved))
+                builder.dismiss()
+                viewModel.getNameFirstTime()
+
+            }
+            builder.show()
+
+
+        }
+
         viewModel.reminderList.observe(viewLifecycleOwner) {
             if (it != null && it.isNotEmpty()) {
                 viewModel.isLoading.value = false
@@ -94,6 +124,17 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                 binding.tvTodayReminderTitle.text = reminderTitleWithCapitalise
                 binding.tvTodayReminderTitle.text.toString()
                 binding.tvTodayReminderTime.text = reminder.time
+
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val remoteViews =
+                    RemoteViews(requireContext().packageName, R.layout.reminder_widget).also {
+                        it.setTextViewText(R.id.appwidget_text, reminderTitleWithCapitalise)
+                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
+                    }
+                val widgetId = sharedPrefRepository.getWidgetId()
+                appWidgetManager.partiallyUpdateAppWidget(widgetId, remoteViews)
+
+
             } else {
                 setTodayReminderVisibility()
             }
@@ -228,6 +269,5 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         deleteDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
         deleteDrawable.draw(c)
     }
-
 
 }

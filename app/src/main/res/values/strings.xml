@@ -15,10 +15,10 @@
     <string name="select_time">Select Time</string>
     <string name="reminder_title_not_be_empty">Reminder title not be empty</string>
     <string name="saved">Saved</string>
+    <string name="name_saved">Name saved</string>
     <string name="select_event_time">Select Event Time</string>
     <string name="reminder_date_not_be_empty">Reminder date not be empty</string>
     <string name="reminder_time_not_be_empty">Reminder time not be empty</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="delete">delete</string>
     <string name="update">Update</string>
@@ -34,7 +34,11 @@
         <item>Family</item>
         <item>Home</item>
         <item>Personal</item>
-        <item>Friend</item>
+        <item>Friendship</item>
     </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="name">Name</string>
 
 </resources>

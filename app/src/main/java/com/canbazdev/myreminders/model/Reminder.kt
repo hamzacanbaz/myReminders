@@ -3,6 +3,7 @@ package com.canbazdev.myreminders.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.canbazdev.myreminders.util.enum.Categories
 import java.io.Serializable
 
 @Entity(tableName = "reminder_table")
@@ -17,6 +18,9 @@ data class Reminder(
     var date: String = "",
 
     @ColumnInfo(name = "time")
-    var time: String = ""
+    var time: String = "",
+
+    @ColumnInfo(name = "category")
+    var category: Int = Categories.OTHER.ordinal
 
 ) : Serializable

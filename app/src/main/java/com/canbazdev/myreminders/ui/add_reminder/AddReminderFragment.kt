@@ -19,6 +19,7 @@ import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
+import com.canbazdev.myreminders.util.enum.Categories
 import com.canbazdev.myreminders.util.hideKeyboard
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
@@ -39,6 +40,7 @@ class AddReminderFragment :
     private val day = mcurrentTime.get(Calendar.DAY_OF_MONTH)
     private lateinit var categoriesAdapter: CategoryAdapter
     private lateinit var rvCategories: RecyclerView
+    private var selectedCategory = Categories.OTHER.ordinal
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +63,8 @@ class AddReminderFragment :
         categoriesList.add(Category("Family", resources.getColor(R.color.red_light)))
         categoriesList.add(Category("Home", resources.getColor(R.color.purple_light)))
         categoriesList.add(Category("Personal", resources.getColor(R.color.pink_light)))
-        categoriesList.add(Category("Friend", resources.getColor(R.color.blue_light)))
+        categoriesList.add(Category("Friendship", resources.getColor(R.color.blue_light)))
+        categoriesList.add(Category("Other", resources.getColor(R.color.warning_stroke_color)))
         categoriesAdapter.setCategoriesListList(categoriesList.toList())
         categoriesAdapter.notifyDataSetChanged()
 
@@ -128,7 +131,8 @@ class AddReminderFragment :
                     Reminder(
                         title = binding.etTitle.text.toString().trim(),
                         date = formatDate(pickedDate),
-                        time = pickedEventTime
+                        time = pickedEventTime,
+                        category = selectedCategory
                     )
                 )
                 showShortToast(getString(R.string.saved))
@@ -180,12 +184,10 @@ class AddReminderFragment :
         println(pos)
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
 
     override fun onItemClicked(position: Int, category: Category) {
-        println(position)
+        selectedCategory = Categories.values()[position].ordinal
     }
 
 

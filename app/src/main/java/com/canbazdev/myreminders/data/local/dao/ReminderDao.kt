@@ -13,6 +13,9 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY time ASC")
     fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>>
 
+    @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY time ASC")
+    fun getTodaysAllRemindersForWidget(currentDate: String): List<Reminder>
+
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate AND time>:currentTime ORDER BY time ASC LIMIT 1")
     fun getClosestReminderToday(currentDate: String, currentTime: String): LiveData<Reminder>
 

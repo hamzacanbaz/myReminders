@@ -6,5 +6,6 @@ data class Category(
     var title: String,
     @ColorInt
     var color: Int,
+    var isSelected: Boolean = false
 
     )

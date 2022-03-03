@@ -1,0 +1,18 @@
+<resources>
+
+    <style name="Widget.MyReminders.AppWidget.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
+
+    <style name="Widget.MyReminders.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="CustomTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/background_rounded</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+</resources>

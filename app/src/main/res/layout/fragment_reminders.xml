@@ -146,23 +146,15 @@
                         android:layout_marginTop="@dimen/margin_16dp"
                         android:layout_marginBottom="@dimen/margin_16dp"
                         android:contentDescription="@string/bell"
+                        android:paddingStart="@dimen/margin_8dp"
                         android:paddingTop="@dimen/margin_8dp"
+                        android:paddingEnd="@dimen/margin_8dp"
                         android:paddingBottom="@dimen/margin_8dp"
                         android:src="@drawable/bell"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/iv_close_button"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_close_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_4dp"
-                        android:layout_marginEnd="@dimen/margin_4dp"
-                        android:contentDescription="@string/close_button"
-                        android:src="@drawable/ic_baseline_close_24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -181,19 +173,17 @@
             tools:itemCount="10"
             tools:listitem="@layout/item_reminder" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageView
             android:id="@+id/fab_go_to_add_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:layout_marginEnd="@dimen/margin_16dp"
-            android:layout_marginBottom="@dimen/margin_16dp"
-            android:backgroundTint="@color/primary"
             android:contentDescription="@string/fab_add_reminder"
-            android:src="@drawable/ic_add_32dp"
+            android:src="@drawable/gr1"
             app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

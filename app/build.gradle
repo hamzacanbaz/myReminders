@@ -20,6 +20,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        viewBinding true
     }
 
     buildTypes {
@@ -102,6 +103,7 @@ dependencies {
 
     // Spinner Library
     implementation "com.github.skydoves:powerspinner:1.1.9"
+
 
 
 

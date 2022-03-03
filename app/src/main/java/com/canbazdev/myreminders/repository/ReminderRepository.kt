@@ -9,6 +9,9 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
     fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>> =
         reminderDao.getTodaysAllReminders(currentDate)
 
+    fun getTodaysAllRemindersForWidget(currentDate: String): List<Reminder> =
+        reminderDao.getTodaysAllRemindersForWidget(currentDate)
+
     fun getClosestReminderToday(currentDate: String, currentTime: String): LiveData<Reminder> =
         reminderDao.getClosestReminderToday(currentDate, currentTime)
 

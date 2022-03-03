@@ -8,7 +8,7 @@ import com.canbazdev.myreminders.data.local.dao.ReminderDao
 import com.canbazdev.myreminders.model.Reminder
 
 
-@Database(entities = [Reminder::class], version = 4, exportSchema = false)
+@Database(entities = [Reminder::class], version = 5, exportSchema = false)
 abstract class ReminderDatabase : RoomDatabase() {
 
     abstract fun reminderDao(): ReminderDao
@@ -24,7 +24,7 @@ abstract class ReminderDatabase : RoomDatabase() {
                     context.applicationContext,
                     ReminderDatabase::class.java,
                     "reminder_database"
-                ).fallbackToDestructiveMigration().build()
+                ).allowMainThreadQueries().fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
             }

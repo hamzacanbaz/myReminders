@@ -1,11 +1,15 @@
 package com.canbazdev.myreminders.adapter
 
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.databinding.ItemReminderBinding
 import com.canbazdev.myreminders.model.Reminder
+import com.canbazdev.myreminders.util.enum.Categories
 
 class RemindersAdapter(
     private val listener: OnItemClickedListener
@@ -17,7 +21,6 @@ class RemindersAdapter(
     fun setRemindersList(list: List<Reminder>) {
         remindersList.clear()
         remindersList.addAll(list)
-//        println(list.size)
         notifyDataSetChanged()
 
     }
@@ -32,6 +35,16 @@ class RemindersAdapter(
         override fun bind(item: Reminder) {
             binding.tvReminderTitle.text = item.title
             binding.tvRemiderDate.text = item.date
+            binding.vLeftView.setBackgroundResource(R.drawable.background_left_item_reminder_view)
+            // TODO deprecated method
+            val drawable: Drawable = binding.vLeftView.background
+
+            drawable.setColorFilter(
+                itemView.resources.getColor(Categories.values()[item.category].colorInt),
+                PorterDuff.Mode.SRC_ATOP
+            );
+            binding.vLeftView.background = drawable
+
         }
 
         override fun onClick(p0: View?) {

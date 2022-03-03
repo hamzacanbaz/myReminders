@@ -2,14 +2,18 @@ package com.canbazdev.myreminders.repository
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
+import com.canbazdev.myreminders.model.Reminder
 import com.canbazdev.myreminders.util.Constants.DATA_SAVED_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.NAME_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.NAME_SAVED_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.PREFERENCE_NAME
+import com.canbazdev.myreminders.util.Constants.WIDGET_ID
 
 class SharedPrefRepository(context: Context) {
 
-    private val pref: SharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    private val pref: SharedPreferences =
+        context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
     private val editor = pref.edit()
 
@@ -58,5 +62,18 @@ class SharedPrefRepository(context: Context) {
     }
 
     fun getNameFirstText(): String = NAME_FIRST_TIME.getString()
+
+    fun setTodaysReminders(todaysAllReminders: LiveData<List<Reminder>>) {
+
+    }
+
+    fun setWidgetId(id: Int) {
+        return WIDGET_ID.put(id)
+    }
+
+
+    fun getWidgetId(): Int {
+        return WIDGET_ID.getInt()
+    }
 
 }

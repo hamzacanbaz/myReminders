@@ -42,8 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="@dimen/margin_16dp"
+            app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_toolbar">
@@ -53,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/shippori"
+                android:gravity="center_vertical"
                 android:hint="@string/add_reminder_title"
                 android:textColor="@color/hint_color"
                 android:textSize="@dimen/sp20" />
@@ -98,7 +100,7 @@
             android:layout_marginTop="@dimen/margin_16dp"
             app:layout_constraintEnd_toStartOf="@id/cl_time_picker"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_title">
+            app:layout_constraintTop_toBottomOf="@id/tv_choose_date">
 
             <View
                 android:id="@+id/v_date_top_view"
@@ -153,27 +155,16 @@
             android:id="@+id/cl_time_picker"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginTop="@dimen/margin_16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_date_picker"
-            app:layout_constraintTop_toBottomOf="@id/til_title">
+            app:layout_constraintStart_toEndOf="@id/cl_date_picker"
+            app:layout_constraintTop_toBottomOf="@id/tv_choose_time">
 
-            <View
-                android:id="@+id/v_time_top_view"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginBottom="@dimen/margin_8dp"
-                android:background="@drawable/background_date_time_pick_top_view"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@drawable/background_date_time_pick"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/v_time_top_view">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tv_time_hour"
@@ -233,7 +224,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:layout_marginEnd="@dimen/margin_16dp"
             android:paddingStart="@dimen/margin_16dp"
             android:paddingEnd="@dimen/margin_16dp"
@@ -241,13 +232,15 @@
             android:textColor="@color/hint_color_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_date_picker" />
+            app:layout_constraintTop_toBottomOf="@+id/til_title" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16dp"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
             android:paddingLeft="@dimen/margin_24dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
@@ -255,6 +248,31 @@
             app:layout_constraintTop_toBottomOf="@id/til_select_category"
             app:spanCount="3"
             tools:listitem="@layout/item_theme" />
+
+        <TextView
+            android:id="@+id/tv_choose_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Choose Date"
+            android:textColor="@color/hint_color_light"
+            app:layout_constraintEnd_toStartOf="@id/tv_choose_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_categories" />
+
+        <TextView
+            android:id="@+id/tv_choose_time"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Choose Time"
+            android:textColor="@color/hint_color_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_choose_date"
+            app:layout_constraintTop_toBottomOf="@+id/rv_categories" />
+
 
         <Button
             android:id="@+id/btnSaveReminder"

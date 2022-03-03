@@ -82,7 +82,6 @@ class RemindersViewModel(
     }
 
     private fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>> {
-//        mShowProgressBarUserInfo.postValue(false)
         return repository.getTodaysAllReminders(currentDate)
     }
 
@@ -90,9 +89,6 @@ class RemindersViewModel(
         currentDate: String,
         currentTime: String
     ): LiveData<Reminder> {
-//        mShowProgressBarUserInfo.postValue(false)
-        println(currentDate)
-        println(currentTime)
         return repository.getClosestReminderToday(currentDate, currentTime)
     }
 

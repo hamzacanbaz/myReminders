@@ -11,12 +11,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyReminders"
         tools:replace="android:icon">
+        <receiver
+            android:name=".ui.add_reminder.ReminderWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/reminder_widget_info" />
+        </receiver>
 
         <activity
-            android:name="com.canbazdev.myreminders.ui.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.CustomSplashScreenTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

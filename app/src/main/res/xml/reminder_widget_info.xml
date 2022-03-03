@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/app_widget_description"
+    android:initialKeyguardLayout="@layout/reminder_widget"
+    android:initialLayout="@layout/reminder_widget"
+    android:minWidth="110dp"
+    android:minHeight="100dp"
+    android:previewLayout="@layout/reminder_widget"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="3"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="7200000"
+    android:widgetCategory="home_screen" />
+
+    <!--
+
+     1 minutes = 60.000 ms
+     2 hours = 7.200.000 ms
+
+     -->

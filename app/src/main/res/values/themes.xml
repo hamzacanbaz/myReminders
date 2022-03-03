@@ -22,6 +22,14 @@
 
     </style>
 
+    <style name="TextInputEditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="strokeColor">@color/primary_dark</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeColor">@color/red</item>
+        <item name="boxStrokeWidth">2dp</item>
+
+    </style>
+
     <style name="borderButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeWidth">1dp</item>
     </style>
@@ -51,6 +59,21 @@
 
     <style name="exampleCursor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="colorControlActivated">@color/white</item>
+    </style>
+
+    <style name="Theme.MyReminders.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.MyReminders.AppWidgetContainer" parent="Theme.MyReminders.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">16dp</item>
     </style>
 
 
