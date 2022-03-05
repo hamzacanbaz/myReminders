@@ -1,10 +1,12 @@
 package com.canbazdev.myreminders.ui.add_reminder
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +23,7 @@ import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.enum.Categories
 import com.canbazdev.myreminders.util.hideKeyboard
+import com.canbazdev.myreminders.util.toUpperCase
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -42,6 +45,7 @@ class AddReminderFragment :
     private lateinit var rvCategories: RecyclerView
     private var selectedCategory = Categories.OTHER.ordinal
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,35 +58,27 @@ class AddReminderFragment :
             ViewModelFactory(repository, sharedPrefRepository)
         }
 
+        showInitialDateAndTime()
+
         categoriesAdapter = CategoryAdapter(this)
         binding.rvCategories.adapter = categoriesAdapter
-
-        val categoriesList: MutableList<Category> = mutableListOf()
-        categoriesList.add(Category("Work", resources.getColor(R.color.green_light)))
-        categoriesList.add(Category("Education", resources.getColor(R.color.orange)))
-        categoriesList.add(Category("Family", resources.getColor(R.color.red_light)))
-        categoriesList.add(Category("Home", resources.getColor(R.color.purple_light)))
-        categoriesList.add(Category("Personal", resources.getColor(R.color.pink_light)))
-        categoriesList.add(Category("Friendship", resources.getColor(R.color.blue_light)))
-        categoriesList.add(Category("Other", resources.getColor(R.color.warning_stroke_color)))
-        categoriesAdapter.setCategoriesListList(categoriesList.toList())
+        val categories = addCategories()
+        categoriesAdapter.setCategoriesListList(categories)
         categoriesAdapter.notifyDataSetChanged()
-
 
         val yourDatePicker =
             datePickerBuilder(binding.tvDateDay, binding.tvDateYear, year, month, day)
 
-
-        binding.clDatePicker.setOnClickListener {
+        binding.btnSelectDate.setOnClickListener {
             view.hideKeyboard()
             yourDatePicker.datePicker.minDate = mcurrentTime.timeInMillis
             yourDatePicker.show()
         }
-        binding.clTimePicker.setOnClickListener {
+        binding.btnSelectTime.setOnClickListener {
             val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(CLOCK_24H)
-                .setHour(12)
-                .setMinute(10)
+                .setHour(mcurrentTime.get(Calendar.HOUR))
+                .setMinute(mcurrentTime.get(Calendar.MINUTE))
                 .setTitleText(getString(R.string.select_event_time))
                 .build()
 
@@ -90,54 +86,46 @@ class AddReminderFragment :
             timePicker.showNow(parentFragmentManager, "")
 
             timePicker.addOnPositiveButtonClickListener {
-                pickedEventTime = "${timePicker.hour}:${timePicker.minute}"
-//                binding.btnSelectTime.text = pickedEventTime
+                pickedEventTime =
+                    "${timePicker.hour.toString().trim()}:${timePicker.minute.toString().trim()}"
                 showTime(
                     binding.tvTimeHour,
                     binding.tvTimeMinute,
                     timePicker.hour,
                     timePicker.minute
                 )
-
             }
-
         }
 
         binding.etTitle.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) view.hideKeyboard()
         }
 
-//        ArrayAdapter.createFromResource(
-//            view.context,
-//            R.array.categories,
-//            R.layout.item_dropdown
-//        ).also { adapter ->
-//            adapter.setDropDownViewResource(R.layout.item_dropdown)
-//            binding.atvCategory.setAdapter(adapter)
-//        }
-
-
         binding.btnSaveReminder.setOnClickListener {
-//            println(binding.atvCategory.text)
 
-            if (binding.etTitle.text.isNullOrBlank()) {
-                showLongToast(getString(R.string.reminder_title_not_be_empty))
-            } else if (pickedDate.isEmpty()) {
-                showLongToast(getString(R.string.reminder_date_not_be_empty))
-            } else if (pickedEventTime.isEmpty()) {
-                showLongToast(getString(R.string.reminder_time_not_be_empty))
-            } else {
-                viewModel.insertReminder(
-                    Reminder(
-                        title = binding.etTitle.text.toString().trim(),
-                        date = formatDate(pickedDate),
-                        time = pickedEventTime,
-                        category = selectedCategory
+            when {
+                binding.etTitle.text.isNullOrBlank() -> {
+                    showLongToast(getString(R.string.reminder_title_not_be_empty))
+                }
+                pickedDate.isEmpty() -> {
+                    showLongToast(getString(R.string.reminder_date_not_be_empty))
+                }
+                pickedEventTime.isEmpty() -> {
+                    showLongToast(getString(R.string.reminder_time_not_be_empty))
+                }
+                else -> {
+                    viewModel.insertReminder(
+                        Reminder(
+                            title = binding.etTitle.text.toString().trim(),
+                            date = formatDate(pickedDate),
+                            time = formatTime(pickedEventTime.trim()),
+                            category = selectedCategory
+                        )
                     )
-                )
-                showShortToast(getString(R.string.saved))
-                clearInputAreas()
-                goToRemindersFromAddReminderFragment()
+                    showShortToast(getString(R.string.saved))
+                    clearInputAreas()
+                    goToRemindersFromAddReminderFragment()
+                }
             }
         }
 
@@ -160,9 +148,9 @@ class AddReminderFragment :
     private fun datePickerBuilder(
         tvDay: TextView,
         tvMonthAndYear: TextView,
-        myear: Int,
-        mmonth: Int,
-        mday: Int
+        datePickerYear: Int,
+        datePickerMonth: Int,
+        datePickerDay: Int
     ): DatePickerDialog {
         return DatePickerDialog(
             requireContext(),
@@ -176,7 +164,7 @@ class AddReminderFragment :
                 showDate(tvDay, tvMonthAndYear, date)
                 pickedDate = date
 
-            }, myear, mmonth, mday
+            }, datePickerYear, datePickerMonth, datePickerDay
         )
     }
 
@@ -188,6 +176,82 @@ class AddReminderFragment :
 
     override fun onItemClicked(position: Int, category: Category) {
         selectedCategory = Categories.values()[position].ordinal
+    }
+
+    private fun addCategories(): List<Category> {
+        val categoriesList: MutableList<Category> = mutableListOf()
+        categoriesList.add(
+            Category(
+                Categories.WORK.name.toUpperCase(),
+                ContextCompat.getColor(requireContext(), Categories.WORK.colorInt)
+            )
+        )
+        categoriesList.add(
+            Category(
+                Categories.EDUCATION.name.toUpperCase(),
+                ContextCompat.getColor(requireContext(), Categories.EDUCATION.colorInt)
+            )
+        )
+        categoriesList.add(
+            Category(
+                Categories.FAMILY.name.toUpperCase(),
+                ContextCompat.getColor(requireContext(), Categories.FAMILY.colorInt)
+            )
+        )
+        categoriesList.add(
+            Category(
+                Categories.HOME.name.toUpperCase(),
+                ContextCompat.getColor(requireContext(), Categories.HOME.colorInt)
+            )
+        )
+        categoriesList.add(
+            Category(
+                Categories.PERSONAL.name.toUpperCase(),
+                ContextCompat.getColor(requireContext(), Categories.PERSONAL.colorInt)
+            )
+        )
+        categoriesList.add(
+            Category(
+                Categories.FRIENDSHIP.name.toUpperCase(),
+                ContextCompat.getColor(requireContext(), Categories.FRIENDSHIP.colorInt)
+            )
+        )
+
+        categoriesList.add(
+            Category(
+                Categories.FUN.name.lowercase().replaceFirstChar {
+                    it.uppercase()
+                },
+                ContextCompat.getColor(requireContext(), Categories.FUN.colorInt)
+            )
+        )
+
+        categoriesList.add(
+            Category(
+                Categories.OTHER.name.lowercase().replaceFirstChar {
+                    it.uppercase()
+                },
+                ContextCompat.getColor(requireContext(), Categories.OTHER.colorInt)
+            )
+        )
+        return categoriesList.toList()
+    }
+
+    private fun showInitialDateAndTime() {
+        val date = String.format(
+            "%d/%d/%d",
+            day,
+            month + 1,
+            year
+        )
+        showDate(binding.tvDateDay, binding.tvDateYear, date)
+        showTime(
+            binding.tvTimeHour,
+            binding.tvTimeMinute,
+            mcurrentTime.get(Calendar.HOUR),
+            mcurrentTime.get(Calendar.MINUTE)
+        )
+
     }
 
 

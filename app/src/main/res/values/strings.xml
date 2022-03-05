@@ -40,5 +40,16 @@
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
     <string name="name">Name</string>
+    <string name="you_have_no_reminders">"Today, you have no reminders."</string>
+    <string name="you_are_free">You are free</string>
+
+
+    <!-- Placeholders -->
+    <string name="text_view_month_and_year">%1$s %2$s</string>
+    <string name="today_you_have_x_reminders">Today you have %1$s reminders</string>
+    <string name="hello_x">Hello %1$s</string>
+    <string name="minutes">Minutes</string>
+    <string name="seconds">Seconds</string>
+
 
 </resources>

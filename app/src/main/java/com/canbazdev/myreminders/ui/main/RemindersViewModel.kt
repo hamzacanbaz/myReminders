@@ -33,6 +33,8 @@ class RemindersViewModel(
     val savedName: LiveData<String>
         get() = _savedName
 
+    val leftTime: MutableLiveData<String> = MutableLiveData()
+
 
     val reminderList: LiveData<List<Reminder>> = getAllReminders()
     val todaysReminderList: LiveData<List<Reminder>> = getTodaysAllReminders(
@@ -135,7 +137,7 @@ class RemindersViewModel(
     ): String {
         val inputFormat = SimpleDateFormat(inputFormatPattern, Locale.US)
         val outputFormat = SimpleDateFormat(outputFormatPattern, Locale.US)
-        var date: Date? = null
+        val date: Date?
         var outputDate: String? = " "
 
         try {
@@ -150,19 +152,19 @@ class RemindersViewModel(
 
 
     fun splitTimeIntoHourAndMinute(timeText: String): Pair<Int, Int> {
-        val splittedTimeList = timeText.split(":")
-        val hour = splittedTimeList[0].trim().toInt()
-        val minute = splittedTimeList[1].trim().toInt()
+        val splitTimeList = timeText.split(":")
+        val hour = splitTimeList[0].trim().toInt()
+        val minute = splitTimeList[1].trim().toInt()
         return Pair(hour, minute)
     }
 
-    fun getCurrentDateWithNormalFormat(): String {
+    private fun getCurrentDateWithNormalFormat(): String {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 //        println(dateFormat.format(Date()).toString())
         return dateFormat.format(Date())
     }
 
-    fun getCurrentTimeWithNormalFormat(): String {
+    private fun getCurrentTimeWithNormalFormat(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dtf = DateTimeFormatter.ofPattern("HH:mm")
             val now: LocalDateTime = LocalDateTime.now()
@@ -174,5 +176,31 @@ class RemindersViewModel(
         }
 
     }
+
+    fun formatMilliSecondsToTime(milliseconds: Long): String {
+        var dates = ""
+        val seconds = (milliseconds / 1000).toInt() % 60
+        val minutes = (milliseconds / (1000 * 60) % 60).toInt()
+        val hours = (milliseconds / (1000 * 60 * 60)).toInt() % 24
+        val days = (milliseconds / (1000 * 60 * 60 * 24)).toInt()
+        if (days > 0) dates += "$days Days "
+        if (days > 0 || hours > 0) dates += twoDigitString(hours.toLong()) + " Hrs "
+        if (minutes >= 0) dates += twoDigitString(minutes.toLong()) + " Mins " + twoDigitString(
+            seconds.toLong()
+        ) + " Secs"
+        println("date$dates")
+        leftTime.value = dates
+        return dates
+    }
+
+    private fun twoDigitString(number: Long): String? {
+        if (number == 0L) {
+            return "00"
+        }
+        return if (number / 10 == 0L) {
+            "0$number"
+        } else number.toString()
+    }
+
 
 }

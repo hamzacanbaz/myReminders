@@ -12,3 +12,9 @@ fun View.hideKeyboard() {
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     inputMethodManager?.hideSoftInputFromWindow(this.windowToken, 0)
 }
+
+fun String.toUpperCase(): String {
+    return this.lowercase().replaceFirstChar {
+        it.uppercase()
+    }
+}

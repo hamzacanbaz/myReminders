@@ -56,6 +56,7 @@
                 android:fontFamily="@font/shippori"
                 android:gravity="center_vertical"
                 android:hint="@string/add_reminder_title"
+                android:inputType="textVisiblePassword|textNoSuggestions"
                 android:textColor="@color/hint_color"
                 android:textSize="@dimen/sp20" />
 
@@ -95,12 +96,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_date_picker"
-            android:layout_width="75dp"
+            android:layout_width="250dp"
             android:layout_height="75dp"
-            android:layout_marginTop="@dimen/margin_16dp"
-            app:layout_constraintEnd_toStartOf="@id/cl_time_picker"
+            android:layout_marginTop="@dimen/margin_48dp"
+            android:background="@drawable/background_date_time_pick"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_choose_date">
+            app:layout_constraintTop_toBottomOf="@id/rv_categories">
 
             <View
                 android:id="@+id/v_date_top_view"
@@ -114,79 +116,67 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btn_select_date"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:background="@drawable/background_date_time_pick"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_select_time"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/v_date_top_view">
 
                 <TextView
                     android:id="@+id/tv_date_day"
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_8dp"
+                    android:fontFamily="@font/rubik2"
                     android:gravity="center"
                     android:text="08"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_date_year"
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_date_year"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_8dp"
+                    android:layout_marginStart="@dimen/margin_6dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
                     android:text="Feb 22"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
+                    android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_date_day" />
+                    app:layout_constraintStart_toEndOf="@id/tv_date_day"
+                    app:layout_constraintTop_toTopOf="parent" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_time_picker"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cl_date_picker"
-            app:layout_constraintTop_toBottomOf="@id/tv_choose_time">
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:id="@+id/btn_select_time"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_select_date"
+                app:layout_constraintTop_toBottomOf="@id/v_date_top_view">
 
                 <TextView
                     android:id="@+id/tv_time_hour"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik2"
-                    android:gravity="center"
                     android:text="13"
                     android:textSize="22sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/tv_time_minute"
-                    app:layout_constraintHorizontal_bias="0.25"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_time_between"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
                     android:text=":"
@@ -201,19 +191,18 @@
                 <TextView
                     android:id="@+id/tv_time_minute"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
                     android:text="32"
                     android:textSize="22sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_time_between"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -248,30 +237,6 @@
             app:layout_constraintTop_toBottomOf="@id/til_select_category"
             app:spanCount="3"
             tools:listitem="@layout/item_theme" />
-
-        <TextView
-            android:id="@+id/tv_choose_date"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Choose Date"
-            android:textColor="@color/hint_color_light"
-            app:layout_constraintEnd_toStartOf="@id/tv_choose_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_categories" />
-
-        <TextView
-            android:id="@+id/tv_choose_time"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Choose Time"
-            android:textColor="@color/hint_color_light"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_choose_date"
-            app:layout_constraintTop_toBottomOf="@+id/rv_categories" />
 
 
         <Button

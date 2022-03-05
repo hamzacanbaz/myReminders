@@ -41,8 +41,9 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        println("ondestroy from base")
+        super.onDestroyView()
     }
 
     fun showShortToast(displayedText: String) {
@@ -62,7 +63,7 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
 
         val inputFormat = SimpleDateFormat(R.string.input_date_format.toString(), Locale.US)
         val outputFormat = SimpleDateFormat(R.string.output_date_format.toString(), Locale.US)
-        var date: Date? = null
+        val date: Date?
         var outputDate: String? = " "
 
         try {
@@ -76,34 +77,19 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         return "$outputDate/00/00/00"
     }
 
-//    fun showDate(textView: TextView, date: String) {
-//        val splitted = date.split("/")
-//        var newFormattedDateString = ""
-//        val day = splitted[0].toInt()
-//        val month = splitted[1].toInt()
-//        val year = splitted[2].toInt()
-//
-//        newFormattedDateString += if (day < 10) "0$day/" else "$day/"
-//        newFormattedDateString += if (month < 10) "0$month/" else "$month/"
-//
-//        newFormattedDateString += "$year"
-//        textView.text = newFormattedDateString
-//
-//    }
+    fun showDate(tvDay: TextView, tvMonth: TextView, date: String) {
 
-    fun showDate(tvday: TextView, tvmonth: TextView, date: String) {
-
-        val splitted = date.split("/")
-        var day = splitted[0]
-        val month = splitted[1].toInt()
-        var monthText = ""
-        val year = splitted[2]
+        val split = date.split("/")
+        var day = split[0]
+        val month = split[1].toInt()
+        val year = split[2]
 
         day = if (day.length < 2) "0$day" else day
-        monthText = Months.values()[month - 1].toString()
+        val monthText: String = Months.values()[month - 1].toString()
 
-        tvday.text = day
-        tvmonth.text = "$monthText $year"
+        tvDay.text = day
+        tvMonth.text =
+            String.format(resources.getString(R.string.text_view_month_and_year), monthText, year)
 
     }
 
@@ -118,11 +104,11 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
     }
 
     fun formatDate(date: String): String {
-        val splitted = date.split("/")
+        val split = date.split("/")
         var newFormattedDateString = ""
-        val day = splitted[0].toInt()
-        val month = splitted[1].toInt()
-        val year = splitted[2].toInt()
+        val day = split[0].toInt()
+        val month = split[1].toInt()
+        val year = split[2].toInt()
 
         newFormattedDateString += if (day < 10) "0$day/" else "$day/"
         newFormattedDateString += if (month < 10) "0$month/" else "$month/"
@@ -130,6 +116,42 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         newFormattedDateString += "$year"
         return newFormattedDateString
 
+    }
+
+    fun formatTime(time: String): String {
+        val split = time.split(":")
+        var hours = split[0]
+        var minutes = split[1]
+        if (hours.toInt() < 10) hours = "0$hours"
+        if (minutes.toInt() == 0) minutes = "00"
+        return "$hours:$minutes"
+    }
+
+    open fun convertMinutesToMilliseconds(hour: String, minutes: String): Int {
+        var milliseconds = 0
+        milliseconds += (minutes.toInt() * 60000)
+        milliseconds += (hour.toInt() * 60000 * 60)
+        return milliseconds
+    }
+
+    open fun calculateMillisecondsFromDateAndTime(date: String?, time: String): Long {
+        //String date_ = date;
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        try {
+            val mDate: Date = sdf.parse(date!!)!!
+            var timeInMilliseconds = mDate.time
+
+            val split = time.split(":")
+            val hour = split[0].trim()
+            val min = split[1].trim()
+            timeInMilliseconds += convertMinutesToMilliseconds(hour, min)
+
+            return timeInMilliseconds
+        } catch (e: ParseException) {
+
+            e.printStackTrace()
+        }
+        return 0
     }
 
 

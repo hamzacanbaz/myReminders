@@ -37,7 +37,7 @@ import java.util.*
 class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
     RemindersAdapter.OnItemClickedListener {
 
-    private lateinit var rvReminders: RecyclerView;
+    private lateinit var rvReminders: RecyclerView
     private lateinit var remindersAdapter: RemindersAdapter
     private lateinit var progressBar: ProgressBar
 
@@ -105,12 +105,16 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         viewModel.todaysReminderList.observe(viewLifecycleOwner) {
 
             todayReminderNumber = it.size
-            // TODO String placeholder olustur
             if (todayReminderNumber != 0) {
                 binding.tvTodayReminderNumbers.text =
-                    "Today, you have $todayReminderNumber reminders."
+                    String.format(
+                        resources.getString(R.string.today_you_have_x_reminders),
+                        todayReminderNumber
+                    )
+
             } else {
-                binding.tvTodayReminderNumbers.text = "Today, you have no reminders."
+                binding.tvTodayReminderNumbers.text =
+                    resources.getString(R.string.you_have_no_reminders)
             }
         }
 
@@ -147,13 +151,13 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         setUpSwipeToDeleteReminders(viewModel)
 
         viewModel.savedName.observe(viewLifecycleOwner) {
-            binding.tvHelloName.text = "Hello $it"
+            binding.tvHelloName.text = String.format(resources.getString(R.string.hello_x), it)
         }
 
     }
 
     private fun setTodayReminderVisibility() {
-        binding.tvTodayReminderTitle.text = "You are free"
+        binding.tvTodayReminderTitle.text = resources.getString(R.string.you_are_free)
         binding.tvTodayReminderTime.text = ""
 
     }
@@ -178,7 +182,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.layoutPosition
                 val reminder = remindersAdapter.remindersList[position]
                 viewModel.deleteReminder(reminder)
 
@@ -233,9 +237,9 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         actionState: Int,
         isCurrently: Boolean,
     ) {
-        val mClearPaint: Paint = Paint()
+        val mClearPaint = Paint()
         mClearPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-        val mBg: ColorDrawable = ColorDrawable()
+        val mBg = ColorDrawable()
         val bgColor = Color.parseColor("#b80f0a")
         val deleteDrawable: Drawable? =
             ContextCompat.getDrawable(requireContext(), R.drawable.trash)
@@ -244,7 +248,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
         val itemView: View = viewHolder.itemView
         val itemHeight = itemView.height
-        var cancelled = dx == 0f && !isCurrently
+        val cancelled = dx == 0f && !isCurrently
 
         if (cancelled) {
             c.drawRect(

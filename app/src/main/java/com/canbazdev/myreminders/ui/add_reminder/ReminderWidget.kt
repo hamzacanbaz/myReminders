@@ -46,8 +46,8 @@ internal fun updateAppWidget(
 ) {
     Log.i("ReminderWidget", "Widget updateAppWidget id: $appWidgetId")
     // TODO should be no reminders text
-    var widgetText = ""
-    var widgetTime = ""
+    val widgetText: String
+    val widgetTime: String
 
     val sharedPrefRepository = SharedPrefRepository(context)
     sharedPrefRepository.setWidgetId(appWidgetId)
@@ -66,7 +66,6 @@ internal fun updateAppWidget(
     } else {
         widgetText = ""
         widgetTime = ""
-
     }
 
 
