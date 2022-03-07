@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16dp"
         android:fontFamily="@font/rubik3"
-        android:text="Change Name"
+        android:text="@string/change_name"
         android:gravity="center"
         android:textColor="@color/primary_dark"
         android:textSize="18sp"

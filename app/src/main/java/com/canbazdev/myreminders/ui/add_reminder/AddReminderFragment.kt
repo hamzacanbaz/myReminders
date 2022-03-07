@@ -35,12 +35,14 @@ class AddReminderFragment :
     BaseFragment<FragmentAddReminderBinding>(R.layout.fragment_add_reminder),
     AdapterView.OnItemSelectedListener, CategoryAdapter.OnCategoryClickedListener {
 
-    private var pickedDate: String = ""
-    private var pickedEventTime: String = ""
     private val mcurrentTime: Calendar = Calendar.getInstance()
     private val year = mcurrentTime.get(Calendar.YEAR)
     private val month = mcurrentTime.get(Calendar.MONTH)
     private val day = mcurrentTime.get(Calendar.DAY_OF_MONTH)
+
+    private var pickedEventTime: String = ""
+
+    private var pickedDate: String = ""
     private lateinit var categoriesAdapter: CategoryAdapter
     private lateinit var rvCategories: RecyclerView
     private var selectedCategory = Categories.OTHER.ordinal
@@ -48,11 +50,19 @@ class AddReminderFragment :
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val reminderDao = ReminderDatabase.getDatabase(requireContext()).reminderDao()
         val repository = ReminderRepository(reminderDao)
         val sharedPrefRepository = SharedPrefRepository(requireContext())
+
+
+        pickedEventTime =
+            "${mcurrentTime.get(Calendar.HOUR_OF_DAY)}:${mcurrentTime.get(Calendar.MINUTE)}"
         rvCategories = binding.rvCategories
+
+        pickedDate =
+            "${mcurrentTime.get(Calendar.DAY_OF_MONTH)}/${mcurrentTime.get(Calendar.MONTH) + 1}/${
+                mcurrentTime.get(Calendar.YEAR)
+            }"
 
         val viewModel: RemindersViewModel by viewModels {
             ViewModelFactory(repository, sharedPrefRepository)
@@ -77,7 +87,7 @@ class AddReminderFragment :
         binding.btnSelectTime.setOnClickListener {
             val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(CLOCK_24H)
-                .setHour(mcurrentTime.get(Calendar.HOUR))
+                .setHour(mcurrentTime.get(Calendar.HOUR_OF_DAY))
                 .setMinute(mcurrentTime.get(Calendar.MINUTE))
                 .setTitleText(getString(R.string.select_event_time))
                 .build()
@@ -248,7 +258,7 @@ class AddReminderFragment :
         showTime(
             binding.tvTimeHour,
             binding.tvTimeMinute,
-            mcurrentTime.get(Calendar.HOUR),
+            mcurrentTime.get(Calendar.HOUR_OF_DAY),
             mcurrentTime.get(Calendar.MINUTE)
         )
 

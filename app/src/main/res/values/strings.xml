@@ -50,6 +50,12 @@
     <string name="hello_x">Hello %1$s</string>
     <string name="minutes">Minutes</string>
     <string name="seconds">Seconds</string>
+    <string name="myreminders">MyReminders</string>
+    <string name="are_you_sure_you_want_to_close_this_app">Are you sure you want to close this app?</string>
+    <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_name">Change Name</string>
+    <string name="this_reminder_has_expired">This reminder has expired!</string>
 
 
 </resources>

@@ -69,9 +69,9 @@ internal fun updateAppWidget(
     }
 
 
-    val views = RemoteViews(context.packageName, R.layout.reminder_widget)
-    views.setTextViewText(R.id.appwidget_text, widgetText)
-    views.setTextViewText(R.id.appwidget_left_time, widgetTime)
+    val views = RemoteViews(context.packageName, R.layout.left_time_for_widget)
+//    views.setTextViewText(R.id.appwidget_text, widgetText)
+//    views.setTextViewText(R.id.appwidget_left_time, widgetTime)
 
 
     appWidgetManager.updateAppWidget(appWidgetId, views)

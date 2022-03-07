@@ -27,6 +27,7 @@ import com.canbazdev.myreminders.repository.ReminderRepository
 import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
+import com.canbazdev.myreminders.util.enum.Categories
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -79,6 +80,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
             builder.setView(alertDialog)
 
+
             alertDialog.findViewById<Button>(R.id.btn_save_name).setOnClickListener {
                 val name = etAlertDialogName.text.toString()
                 sharedPrefRepository.setNameFirstText(name)
@@ -129,14 +131,43 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                 binding.tvTodayReminderTitle.text.toString()
                 binding.tvTodayReminderTime.text = reminder.time
 
+
                 val appWidgetManager = AppWidgetManager.getInstance(context)
-                val remoteViews =
-                    RemoteViews(requireContext().packageName, R.layout.reminder_widget).also {
-                        it.setTextViewText(R.id.appwidget_text, reminderTitleWithCapitalise)
-                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
-                    }
+
+                val millisecondsBetweenReminderAndNow =
+                    calculateMillisecondsFromDateAndTime(reminder.date, reminder.time)
+                val date = Date().time
+                viewModel.formatMilliSecondsToTime(millisecondsBetweenReminderAndNow - date)
+
+
+                val views = RemoteViews(
+                    context?.packageName,
+                    R.layout.left_time_for_widget
+                ).also {
+                    val leftTime = viewModel.leftTime.value.toString().split(" ")
+                    println("anan" + leftTime)
+                    // TODO set left time and days
+                    it.setTextViewText(R.id.tv_widget_title, reminderTitleWithCapitalise)
+                    it.setImageViewResource(
+                        R.id.iv_widget_category,
+                        Categories.values()[reminder.category].drawable
+                    )
+//                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
+
+                }
+
                 val widgetId = sharedPrefRepository.getWidgetId()
-                appWidgetManager.partiallyUpdateAppWidget(widgetId, remoteViews)
+                appWidgetManager.updateAppWidget(widgetId, views)
+
+
+//                val appWidgetManager = AppWidgetManager.getInstance(context)
+//                val remoteViews =
+//                    RemoteViews(requireContext().packageName, R.layout.reminder_widget).also {
+//                        it.setTextViewText(R.id.appwidget_text, reminderTitleWithCapitalise)
+//                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
+//                    }
+//                val widgetId = sharedPrefRepository.getWidgetId()
+//                appWidgetManager.partiallyUpdateAppWidget(widgetId, remoteViews)
 
 
             } else {
@@ -273,5 +304,6 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         deleteDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
         deleteDrawable.draw(c)
     }
+
 
 }

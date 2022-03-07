@@ -68,9 +68,8 @@ class DetailReminderFragment :
             viewModel.formatMilliSecondsToTime(millisecondsBetweenReminderAndNow - date)
         }
 
-
-        var differenceTimeBetweenReminderAndNow: Long = 0
-        differenceTimeBetweenReminderAndNow = millisecondsBetweenReminderAndNow - Date().time
+        val differenceTimeBetweenReminderAndNow: Long =
+            millisecondsBetweenReminderAndNow - Date().time
 
         Log.d("AdapterDate", "--$differenceTimeBetweenReminderAndNow")
 
@@ -112,7 +111,7 @@ class DetailReminderFragment :
                     binding.tvLeftTimeHoursText.visibility = GONE
                     binding.tvLeftTimeMinutesText.visibility = GONE
                     binding.tvLeftTimeSecondsText.visibility = GONE
-                    binding.tvExpired.text = "This reminder has expired!"
+                    binding.tvExpired.text = getString(R.string.this_reminder_has_expired)
                 }
             }.start()
 

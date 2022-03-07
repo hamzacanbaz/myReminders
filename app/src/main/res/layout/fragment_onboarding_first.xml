@@ -56,10 +56,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:id="@+id/et_name"
+                android:fontFamily="@font/rubik3"
                 android:layout_height="wrap_content"
                 android:autofillHints="name"
                 android:hint=""
-                android:inputType="text"
+                android:inputType="textVisiblePassword|textNoSuggestions"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,0 +1,17 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/texttexttest"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_8dp"
+    android:layout_marginTop="@dimen/margin_16dp"
+    android:layout_marginBottom="@dimen/margin_8dp"
+    android:contentDescription="@string/appwidget_text"
+    android:gravity="center_horizontal"
+    android:text="Fenerbahce Beko Match"
+    android:textColor="@color/white"
+    android:textSize="14sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
