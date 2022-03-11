@@ -123,7 +123,7 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         var hours = split[0]
         var minutes = split[1]
         if (hours.toInt() < 10) hours = "0$hours"
-        if (minutes.toInt() == 0) minutes = "00"
+        if (minutes.toInt() < 10) minutes = "0$minutes"
         return "$hours:$minutes"
     }
 

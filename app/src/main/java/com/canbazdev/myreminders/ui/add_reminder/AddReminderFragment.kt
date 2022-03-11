@@ -23,6 +23,7 @@ import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.enum.Categories
 import com.canbazdev.myreminders.util.hideKeyboard
+import com.canbazdev.myreminders.util.intResourceToString
 import com.canbazdev.myreminders.util.toUpperCase
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
@@ -192,55 +193,57 @@ class AddReminderFragment :
         val categoriesList: MutableList<Category> = mutableListOf()
         categoriesList.add(
             Category(
-                Categories.WORK.name.toUpperCase(),
+                Categories.WORK.localName.intResourceToString(requireContext()).toUpperCase(),
                 ContextCompat.getColor(requireContext(), Categories.WORK.colorInt)
             )
         )
         categoriesList.add(
             Category(
-                Categories.EDUCATION.name.toUpperCase(),
+                Categories.EDUCATION.localName.intResourceToString(requireContext()).toUpperCase(),
                 ContextCompat.getColor(requireContext(), Categories.EDUCATION.colorInt)
             )
         )
         categoriesList.add(
             Category(
-                Categories.FAMILY.name.toUpperCase(),
+                Categories.FAMILY.localName.intResourceToString(requireContext()).toUpperCase(),
                 ContextCompat.getColor(requireContext(), Categories.FAMILY.colorInt)
             )
         )
         categoriesList.add(
             Category(
-                Categories.HOME.name.toUpperCase(),
+                Categories.HOME.localName.intResourceToString(requireContext()).toUpperCase(),
                 ContextCompat.getColor(requireContext(), Categories.HOME.colorInt)
             )
         )
         categoriesList.add(
             Category(
-                Categories.PERSONAL.name.toUpperCase(),
+                Categories.PERSONAL.localName.intResourceToString(requireContext()).toUpperCase(),
                 ContextCompat.getColor(requireContext(), Categories.PERSONAL.colorInt)
             )
         )
         categoriesList.add(
             Category(
-                Categories.FRIENDSHIP.name.toUpperCase(),
+                Categories.FRIENDSHIP.localName.intResourceToString(requireContext()).toUpperCase(),
                 ContextCompat.getColor(requireContext(), Categories.FRIENDSHIP.colorInt)
             )
         )
 
         categoriesList.add(
             Category(
-                Categories.FUN.name.lowercase().replaceFirstChar {
-                    it.uppercase()
-                },
+                Categories.FUN.localName.intResourceToString(requireContext()).lowercase()
+                    .replaceFirstChar {
+                        it.uppercase()
+                    },
                 ContextCompat.getColor(requireContext(), Categories.FUN.colorInt)
             )
         )
 
         categoriesList.add(
             Category(
-                Categories.OTHER.name.lowercase().replaceFirstChar {
-                    it.uppercase()
-                },
+                Categories.OTHER.localName.intResourceToString(requireContext()).lowercase()
+                    .replaceFirstChar {
+                        it.uppercase()
+                    },
                 ContextCompat.getColor(requireContext(), Categories.OTHER.colorInt)
             )
         )

@@ -7,10 +7,10 @@ import com.canbazdev.myreminders.model.Reminder
 @Dao
 interface ReminderDao {
 
-    @Query("SELECT * FROM reminder_table ORDER BY text ASC")
+    @Query("SELECT * FROM reminder_table ORDER BY date, time ASC")
     fun getAllReminders(): LiveData<List<Reminder>>
 
-    @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY time ASC")
+    @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY date AND time ASC")
     fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>>
 
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY time ASC")

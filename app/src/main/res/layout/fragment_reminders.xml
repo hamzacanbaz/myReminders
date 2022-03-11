@@ -82,7 +82,7 @@
                     android:fontFamily="@font/rubik3"
                     android:text="Today, you have 6 reminders"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_hello_name" />
 
@@ -102,8 +102,8 @@
                         android:id="@+id/tv_today_reminder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_8dp"
-                        android:layout_marginTop="@dimen/margin_8dp"
+                        android:layout_marginStart="@dimen/margin_12dp"
+                        android:layout_marginTop="@dimen/margin_12dp"
                         android:fontFamily="@font/rubik3"
                         android:text="@string/today_reminder"
                         android:textColor="@color/white"
@@ -116,12 +116,12 @@
                         android:id="@+id/tv_today_reminder_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_8dp"
+                        android:layout_marginStart="@dimen/margin_12dp"
                         android:layout_marginTop="@dimen/margin_2dp"
                         android:fontFamily="@font/rubik3"
                         android:text="Complete the task"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_today_reminder" />
 
@@ -129,7 +129,7 @@
                         android:id="@+id/tv_today_reminder_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_8dp"
+                        android:layout_marginStart="@dimen/margin_12dp"
                         android:layout_marginTop="@dimen/margin_2dp"
                         android:fontFamily="@font/rubik3"
                         android:text="13:10 pm"

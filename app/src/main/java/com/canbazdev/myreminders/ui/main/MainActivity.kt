@@ -7,8 +7,12 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.findNavController
 import com.canbazdev.myreminders.R
+import com.canbazdev.myreminders.ui.add_reminder.AddReminderFragment
+import com.canbazdev.myreminders.ui.add_reminder.AddReminderFragmentDirections
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.util.*
 
 
 @DelicateCoroutinesApi
@@ -40,11 +44,20 @@ class MainActivity : AppCompatActivity() {
                     tvCloseButton.setOnClickListener { super.onBackPressed() }
                     tvCancelButton.setOnClickListener { builder.dismiss() }
 
+                } else if (fragment is AddReminderFragment) {
+                    findNavController(R.id.nav_host_fragment).navigate(
+                        AddReminderFragmentDirections.actionAddReminderFragmentToReminderFragment()
+                    )
                 } else {
                     super.onBackPressed()
                 }
             }
         }
+    }
+
+    private fun setLocal(activity: MainActivity, langCode: String) {
+        val locale = Locale(langCode)
+
     }
 
 }

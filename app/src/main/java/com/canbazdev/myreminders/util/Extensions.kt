@@ -18,3 +18,7 @@ fun String.toUpperCase(): String {
         it.uppercase()
     }
 }
+
+fun Int.intResourceToString(context: Context): String {
+    return context.getString(this)
+}

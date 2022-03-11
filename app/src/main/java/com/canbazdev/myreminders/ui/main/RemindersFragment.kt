@@ -1,17 +1,25 @@
 package com.canbazdev.myreminders.ui.main
 
-import android.app.AlertDialog
+import android.app.*
 import android.appwidget.AppWidgetManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.RemoteViews
+import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -20,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.adapter.ReminderDecoration
 import com.canbazdev.myreminders.adapter.RemindersAdapter
+import com.canbazdev.myreminders.broadcastReceiver.AlarmReceiver
 import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentRemindersBinding
 import com.canbazdev.myreminders.model.Reminder
@@ -35,14 +44,24 @@ import java.util.*
 
 
 @DelicateCoroutinesApi
-class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
+open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
     RemindersAdapter.OnItemClickedListener {
 
     private lateinit var rvReminders: RecyclerView
     private lateinit var remindersAdapter: RemindersAdapter
     private lateinit var progressBar: ProgressBar
-
+    private val channelId = "foxandroid"
+    private val notificationId = 101
     private var todayReminderNumber: Int = 0
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        createNotificationChannel()
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,7 +90,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         }
 
         binding.tvHelloName.setOnClickListener {
-
+            setAlarm()
             val layoutInflater = LayoutInflater.from(view.context)
             val alertDialog: View = layoutInflater.inflate(R.layout.dialog_change_name, null)
             val builder = AlertDialog.Builder(view.context).create()
@@ -94,10 +113,84 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
         }
 
-        viewModel.reminderList.observe(viewLifecycleOwner) {
-            if (it != null && it.isNotEmpty()) {
+        viewModel.reminderList.observe(viewLifecycleOwner) { reminderList ->
+//            sendNotification("MyReminders", "${it.size} adet reminder var", R.drawable.friendship)
+            if (reminderList != null && reminderList.isNotEmpty()) {
                 viewModel.isLoading.value = false
-                remindersAdapter.setRemindersList(it)
+                remindersAdapter.setRemindersList(reminderList)
+
+                println("observe all reminders")
+                println(reminderList)
+
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                var flag = 0
+                var index = 0
+                var reminder = reminderList[index]
+                println("flag $flag index $index")
+                while (flag == 0 && index <= reminderList.size - 1) {
+                    println("while flag $flag index $index")
+
+                    reminder = reminderList[index]
+                    val millisecondsBetweenReminderAndNow =
+                        calculateMillisecondsFromDateAndTime(reminder.date, reminder.time)
+                    val date = Date().time
+                    viewModel.formatMilliSecondsToTime(millisecondsBetweenReminderAndNow - date)
+                    if (!viewModel.leftTime.value.isNullOrEmpty()) {
+                        flag = 1
+                    } else {
+                        index++
+                    }
+                }
+
+
+                val reminderTitleWithCapitalise =
+                    reminder.title.lowercase(Locale.getDefault()).replaceFirstChar { char ->
+                        if (char.isLowerCase()) char.titlecase(Locale.getDefault())
+                        else char.toString()
+                    }
+
+                val views = RemoteViews(
+                    context?.packageName,
+                    R.layout.left_time_for_widget
+                ).also {
+                    val leftTime = viewModel.leftTime.value.toString().split(" ")
+                    println("left time$leftTime")
+                    // TODO kalan zamani ekle
+                    // TODO reminder yoksa bugün boşsunuz yazdır
+                    it.setTextViewText(R.id.tv_leftTime_minutes, "00")
+                    it.setTextViewText(R.id.tv_leftTime_hours, "00")
+                    it.setTextViewText(R.id.tv_leftTime_days, "00")
+
+                    when (leftTime.size) {
+                        4 -> {
+                            it.setTextViewText(R.id.tv_leftTime_minutes, leftTime[0])
+                        }
+                        6 -> {
+                            it.setTextViewText(R.id.tv_leftTime_hours, leftTime[0])
+                            it.setTextViewText(R.id.tv_leftTime_minutes, leftTime[2])
+                        }
+                        8 -> {
+                            if (leftTime[0].toInt() < 10) {
+                                it.setTextViewText(R.id.tv_leftTime_days, "0${leftTime[0]}")
+                            } else {
+                                it.setTextViewText(R.id.tv_leftTime_days, leftTime[0])
+                            }
+                            it.setTextViewText(R.id.tv_leftTime_hours, leftTime[2])
+                            it.setTextViewText(R.id.tv_leftTime_minutes, leftTime[4])
+                        }
+                    }
+
+                    it.setTextViewText(R.id.tv_widget_title, reminderTitleWithCapitalise)
+                    it.setImageViewResource(
+                        R.id.iv_widget_category,
+                        Categories.values()[reminder.category].drawable
+                    )
+//                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
+                }
+
+                val widgetId = sharedPrefRepository.getWidgetId()
+                appWidgetManager.updateAppWidget(widgetId, views)
+
             } else {
                 binding.noDataFound.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
@@ -132,34 +225,6 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                 binding.tvTodayReminderTime.text = reminder.time
 
 
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-
-                val millisecondsBetweenReminderAndNow =
-                    calculateMillisecondsFromDateAndTime(reminder.date, reminder.time)
-                val date = Date().time
-                viewModel.formatMilliSecondsToTime(millisecondsBetweenReminderAndNow - date)
-
-
-                val views = RemoteViews(
-                    context?.packageName,
-                    R.layout.left_time_for_widget
-                ).also {
-                    val leftTime = viewModel.leftTime.value.toString().split(" ")
-                    println("anan" + leftTime)
-                    // TODO set left time and days
-                    it.setTextViewText(R.id.tv_widget_title, reminderTitleWithCapitalise)
-                    it.setImageViewResource(
-                        R.id.iv_widget_category,
-                        Categories.values()[reminder.category].drawable
-                    )
-//                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
-
-                }
-
-                val widgetId = sharedPrefRepository.getWidgetId()
-                appWidgetManager.updateAppWidget(widgetId, views)
-
-
 //                val appWidgetManager = AppWidgetManager.getInstance(context)
 //                val remoteViews =
 //                    RemoteViews(requireContext().packageName, R.layout.reminder_widget).also {
@@ -186,6 +251,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         }
 
     }
+
 
     private fun setTodayReminderVisibility() {
         binding.tvTodayReminderTitle.text = resources.getString(R.string.you_are_free)
@@ -303,6 +369,57 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
         deleteDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
         deleteDrawable.draw(c)
+    }
+
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Title"
+            val descriptionText = "Description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(
+                    requireContext(),
+                    NotificationManager::class.java
+                ) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+
+    private fun sendNotification(title: String, text: String, icon: Int) {
+        val builder = NotificationCompat.Builder(requireContext(), channelId)
+            .setSmallIcon(icon)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(requireContext())) {
+            notify(notificationId, builder.build())
+        }
+    }
+
+    private fun setAlarm() {
+        val calendar = Calendar.getInstance()
+        if (Calendar.getInstance()[Calendar.HOUR_OF_DAY] > 9) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1) // add, not set!
+        }
+        calendar[Calendar.HOUR_OF_DAY] = 9
+        calendar[Calendar.MINUTE] = 0
+        calendar[Calendar.SECOND] = 0
+
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), AlarmReceiver::class.java)
+        // TODO intent ile bildirimde gösterilecek şeyleri gönder
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, 0)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP, (calendar.timeInMillis),
+            AlarmManager.INTERVAL_DAY, pendingIntent
+        )
+        Toast.makeText(context, "Alarm set Successfully", Toast.LENGTH_SHORT).show()
     }
 
 

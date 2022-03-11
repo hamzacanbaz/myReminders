@@ -56,7 +56,7 @@
                 android:fontFamily="@font/shippori"
                 android:gravity="center_vertical"
                 android:hint="@string/add_reminder_title"
-                android:inputType="textVisiblePassword|textNoSuggestions"
+                android:inputType="text"
                 android:textColor="@color/hint_color"
                 android:textSize="@dimen/sp20" />
 

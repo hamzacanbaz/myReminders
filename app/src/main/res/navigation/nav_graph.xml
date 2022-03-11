@@ -11,6 +11,8 @@
         android:label="ReminderFragment"
         tools:layout="@layout/fragment_reminders">
         <action
+            app:popUpTo="@id/reminderFragment"
+            app:popUpToInclusive="true"
             android:id="@+id/action_reminderFragment_to_addReminderFragment"
             app:destination="@id/addReminderFragment"
             app:enterAnim="@anim/alpha"

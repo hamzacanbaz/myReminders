@@ -49,6 +49,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:layout_gravity="center"
                     android:id="@+id/tv_leftTime_days_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

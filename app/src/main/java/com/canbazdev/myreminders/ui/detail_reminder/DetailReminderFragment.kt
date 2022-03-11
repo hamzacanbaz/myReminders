@@ -195,23 +195,27 @@ class DetailReminderFragment :
                     time = formatTime(pickedTime.trim())
                 )
                 viewModel.updateReminder(reminder)
-                showShortToast("Reminder Updated")
+                showShortToast(getString(R.string.reminder_updated))
             }
         }
         binding.btnDeleteReminder.setOnClickListener {
-            val alert = AlertView("Delete Reminder", "Do you want to delete it?", AlertStyle.DIALOG)
-            alert.addAction(AlertAction("Delete", AlertActionStyle.NEGATIVE) {
+            val alert = AlertView(
+                getString(R.string.delete_reminder),
+                getString(R.string.do_you_wanna_delete_it),
+                AlertStyle.DIALOG
+            )
+            alert.addAction(AlertAction(getString(R.string.delete), AlertActionStyle.NEGATIVE) {
                 val reminder = binding.reminder!!.copy(
                     title = binding.etTitle.text.toString(),
                     date = pickedDate,
                     time = pickedTime
                 )
                 viewModel.deleteReminder(reminder)
-                showShortToast("Reminder Deleted")
+                showShortToast(getString(R.string.reminder_deleted))
                 goToRemindersFragmentFromDetailFragment()
 
             })
-            alert.addAction(AlertAction("Cancel", AlertActionStyle.DEFAULT) { })
+            alert.addAction(AlertAction(getString(R.string.cancel), AlertActionStyle.DEFAULT) { })
 
             alert.show(activity as AppCompatActivity)
 

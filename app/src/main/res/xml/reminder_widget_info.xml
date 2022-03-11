@@ -9,13 +9,13 @@
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="5"
     android:targetCellHeight="2"
-    android:updatePeriodMillis="7200000"
+    android:updatePeriodMillis="900000"
     android:widgetCategory="home_screen" />
 
     <!--
 
      1 minutes = 60.000 ms
-     2 hours = 7.200.000 ms
+     1 hours = 3.600.000 ms
 
      size
 

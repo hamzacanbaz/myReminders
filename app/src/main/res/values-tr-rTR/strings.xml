@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyReminders</string>
+
+    <!--Reminders Fragment-->
+    <string name="fab_add_reminder">hatırlatıcı ekle</string>
+
+    <!-- Add Reminder Fragment -->
+    <string name="add_reminder_title">Başlık</string>
+    <string name="select_date">Tarih seçiniz</string>
+    <string name="save">Kaydet</string>
+    <string name="input_date_format">MMM dd, yyyy</string>
+    <string name="input_date_format_for_turkish">dd MMM yyyy</string>
+    <string name="input_date_format_with_hours">dd/MM/yyyy/HH/mm/ss</string>
+    <string name="output_date_format">dd/MM/yyyy</string>
+    <string name="select_time">Saat seçiniz</string>
+    <string name="reminder_title_not_be_empty">Hatırlatıcının başlığı boş bırakılamaz</string>
+    <string name="saved">Kaydedildi</string>
+    <string name="name_saved">İsim Kaydedildi</string>
+    <string name="select_event_time">Zaman seçiniz</string>
+    <string name="reminder_date_not_be_empty">Hatırlatıcının tarihi boş bırakılamaz</string>
+    <string name="reminder_time_not_be_empty">Hatırlatıcının saati boş bırakılamaz</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete">Sil</string>
+    <string name="update">Guncelle</string>
+    <string name="no_data_found">Kayıtlı veri bulunamadı</string>
+    <string name="close_button">close button</string>
+    <string name="bell">bell</string>
+    <string name="today_reminder">Bugünün Hatırlatıcıları</string>
+    <string name="select_category">Kategori seçiniz</string>
+
+    <string-array name="categories">
+        <item>Work</item>
+        <item>School</item>
+        <item>Family</item>
+        <item>Home</item>
+        <item>Personal</item>
+        <item>Friendship</item>
+    </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="name">Isim</string>
+    <string name="you_have_no_reminders">"Bugün hatırlatıcın yok"</string>
+    <string name="you_are_free">Serbestsin</string>
+
+
+    <!-- Placeholders -->
+    <string name="text_view_month_and_year">%1$s %2$s</string>
+    <string name="today_you_have_x_reminders">Bugun %1$s hatirlaticin var</string>
+    <string name="hello_x">Merhaba %1$s</string>
+    <string name="minutes">Dakika</string>
+    <string name="seconds">Saniye</string>
+    <string name="myreminders">MyReminders</string>
+    <string name="are_you_sure_you_want_to_close_this_app">Uygulamayı kapatmak istediğinize emin misiniz?</string>
+    <string name="close">Kapat</string>
+    <string name="cancel">İptal</string>
+    <string name="change_name">İsim değiştirme</string>
+    <string name="this_reminder_has_expired">Bu hatırlatıcının süresi dolmuş</string>
+
+    <!--    Categories-->
+    <string name="work">İş</string>
+    <string name="education">Eğitim</string>
+    <string name="family">Aile</string>
+    <string name="home">Ev</string>
+    <string name="personal">Kişisel</string>
+    <string name="friendship">Arkadaşlık</string>
+    <string name="fun">Eğlence</string>
+    <string name="other">Diğer</string>
+
+    <!--    Onboarding-->
+    <string name="let_s_start">Hadi başlayalım</string>
+
+    <!--    Alert Dialog-->
+    <string name="delete_reminder">Hatırlatıcıyı Sil</string>
+    <string name="do_you_wanna_delete_it">Silmek istediğinize emin misiniz?</string>
+    <string name="reminder_updated">Hatırlatıcı Güncellendi</string>
+    <string name="reminder_deleted">Hatırlatıcı Silindi</string>
+
+
+</resources>
