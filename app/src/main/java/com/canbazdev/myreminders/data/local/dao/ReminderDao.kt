@@ -19,6 +19,9 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate AND time>:currentTime ORDER BY time ASC LIMIT 1")
     fun getClosestReminderToday(currentDate: String, currentTime: String): LiveData<Reminder>
 
+    @Query("SELECT * FROM reminder_table WHERE date =:currentDate AND time>:currentTime ORDER BY time ASC LIMIT 1")
+    fun getClosestReminderTodayForWidget(currentDate: String, currentTime: String): Reminder
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReminder(reminder: Reminder)
 

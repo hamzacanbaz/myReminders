@@ -45,18 +45,19 @@
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/activity_main.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/dialog_change_name.xml" value="0.176" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/dialog_close_app.xml" value="0.2" />
-        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_add_reminder.xml" value="0.2101851851851852" />
+        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_add_reminder.xml" value="0.3773898586866168" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_base.xml" value="0.1" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_blank.xml" value="0.23645833333333333" />
-        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_detail_reminder.xml" value="0.2" />
+        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_detail_reminder.xml" value="0.2101851851851852" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_onboarding_first.xml" value="0.1787037037037037" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_onboarding_second.xml" value="0.19410004275331338" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_onboarding_third.xml" value="0.19410004275331338" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_reminders.xml" value="0.264" />
+        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/fragment_view_pager.xml" value="0.11064814814814815" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/item_dropdown.xml" value="0.2" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/item_reminder.xml" value="0.2101851851851852" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/item_theme.xml" value="0.536" />
-        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/left_time_for_widget.xml" value="0.4" />
+        <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/left_time_for_widget.xml" value="0.264" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/reminder_widget.xml" value="0.2101851851851852" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/reminder_widget_test.xml" value="0.2101851851851852" />
         <entry key="..\:/Users/hmz/AndroidStudioProjects/MyReminderApp/app/src/main/res/layout/row_item_reminder.xml" value="0.23645833333333333" />

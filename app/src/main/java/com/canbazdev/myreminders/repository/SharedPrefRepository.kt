@@ -8,6 +8,7 @@ import com.canbazdev.myreminders.util.Constants.DATA_SAVED_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.NAME_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.NAME_SAVED_FIRST_TIME
 import com.canbazdev.myreminders.util.Constants.PREFERENCE_NAME
+import com.canbazdev.myreminders.util.Constants.TODAY_REMINDERS
 import com.canbazdev.myreminders.util.Constants.WIDGET_ID
 
 class SharedPrefRepository(context: Context) {
@@ -75,5 +76,14 @@ class SharedPrefRepository(context: Context) {
     fun getWidgetId(): Int {
         return WIDGET_ID.getInt()
     }
+
+    fun setTodayRemindersCount(todayReminders: Int) {
+        TODAY_REMINDERS.put(todayReminders)
+    }
+
+    fun getTodayRemindersCount(): Int {
+        return TODAY_REMINDERS.getInt()
+    }
+
 
 }

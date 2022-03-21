@@ -8,7 +8,7 @@
     android:layout_marginBottom="@dimen/margin_8dp"
     android:contentDescription="@string/appwidget_text"
     android:gravity="center_horizontal"
-    android:text="Fenerbahce Beko Match"
+    android:text="@string/complete_the_task"
     android:textColor="@color/white"
     android:textSize="14sp"
     app:layout_constraintEnd_toEndOf="parent"

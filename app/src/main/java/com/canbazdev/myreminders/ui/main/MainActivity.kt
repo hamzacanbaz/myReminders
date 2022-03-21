@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         installSplashScreen()
         setContentView(R.layout.activity_main)
     }
@@ -29,27 +31,35 @@ class MainActivity : AppCompatActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         navHost?.let { navFragment ->
             navFragment.childFragmentManager.primaryNavigationFragment?.let { fragment ->
-                if (fragment is RemindersFragment) {
-                    val layoutInflater = LayoutInflater.from(this)
-                    val alertDialog: View = layoutInflater.inflate(R.layout.dialog_close_app, null)
-                    val builder = AlertDialog.Builder(this).create()
-                    val tvCloseButton =
-                        alertDialog.findViewById<TextView>(R.id.tv_dialog_yes_button)
-                    val tvCancelButton =
-                        alertDialog.findViewById<TextView>(R.id.tv_dialog_no_button)
+                when (fragment) {
+                    is RemindersFragment -> {
+                        val layoutInflater = LayoutInflater.from(this)
+                        val alertDialog: View =
+                            layoutInflater.inflate(R.layout.dialog_close_app, null)
+                        val builder = AlertDialog.Builder(this).create()
+                        val tvCloseButton =
+                            alertDialog.findViewById<TextView>(R.id.tv_dialog_yes_button)
+                        val tvCancelButton =
+                            alertDialog.findViewById<TextView>(R.id.tv_dialog_no_button)
 
-                    builder.setView(alertDialog)
-                    builder.show()
+                        builder.setView(alertDialog)
+                        builder.show()
 
-                    tvCloseButton.setOnClickListener { super.onBackPressed() }
-                    tvCancelButton.setOnClickListener { builder.dismiss() }
+                        tvCloseButton.setOnClickListener {
+                            builder.dismiss()
+                            super.onBackPressed()
+                        }
+                        tvCancelButton.setOnClickListener { builder.dismiss() }
 
-                } else if (fragment is AddReminderFragment) {
-                    findNavController(R.id.nav_host_fragment).navigate(
-                        AddReminderFragmentDirections.actionAddReminderFragmentToReminderFragment()
-                    )
-                } else {
-                    super.onBackPressed()
+                    }
+                    is AddReminderFragment -> {
+                        findNavController(R.id.nav_host_fragment).navigate(
+                            AddReminderFragmentDirections.actionAddReminderFragmentToReminderFragment()
+                        )
+                    }
+                    else -> {
+                        super.onBackPressed()
+                    }
                 }
             }
         }

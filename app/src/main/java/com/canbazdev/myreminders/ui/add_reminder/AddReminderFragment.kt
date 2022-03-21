@@ -22,6 +22,7 @@ import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.enum.Categories
+import com.canbazdev.myreminders.util.helpers.BackButtonHelper
 import com.canbazdev.myreminders.util.hideKeyboard
 import com.canbazdev.myreminders.util.intResourceToString
 import com.canbazdev.myreminders.util.toUpperCase
@@ -34,7 +35,8 @@ import java.util.*
 @DelicateCoroutinesApi
 class AddReminderFragment :
     BaseFragment<FragmentAddReminderBinding>(R.layout.fragment_add_reminder),
-    AdapterView.OnItemSelectedListener, CategoryAdapter.OnCategoryClickedListener {
+    AdapterView.OnItemSelectedListener, CategoryAdapter.OnCategoryClickedListener,
+    BackButtonHelper {
 
     private val mcurrentTime: Calendar = Calendar.getInstance()
     private val year = mcurrentTime.get(Calendar.YEAR)
@@ -138,6 +140,9 @@ class AddReminderFragment :
                     goToRemindersFromAddReminderFragment()
                 }
             }
+        }
+        binding.ivBackButton.setOnClickListener {
+            clickBackButton()
         }
 
     }
@@ -265,6 +270,10 @@ class AddReminderFragment :
             mcurrentTime.get(Calendar.MINUTE)
         )
 
+    }
+
+    override fun clickBackButton() {
+        findNavController().navigate(R.id.action_addReminderFragment_to_reminderFragment)
     }
 
 

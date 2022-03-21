@@ -26,11 +26,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/iv_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/back_arrow"
+                android:src="@drawable/ic_baseline_arrow_back" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_32dp"
                 android:fontFamily="@font/rubik3"
-                android:text="Add Reminder"
+                android:text="@string/add_reminder"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp20"
                 android:textStyle="bold" />
@@ -61,38 +69,6 @@
                 android:textSize="@dimen/sp20" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <!--        <Button-->
-        <!--            android:id="@+id/btnn_select_date"-->
-        <!--            style="@style/borderButton"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="@dimen/dp64"-->
-        <!--            android:layout_marginTop="@dimen/margin_16dp"-->
-        <!--            android:calendarViewShown="false"-->
-        <!--            android:datePickerMode="spinner"-->
-        <!--            android:hint="@string/select_date"-->
-        <!--            android:textAlignment="textStart"-->
-        <!--            android:textColor="@color/hint_color"-->
-        <!--            android:textColorHint="@color/hint_color"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/til_title"-->
-        <!--            app:strokeColor="@color/primary_light" />-->
-
-        <!--        <Button-->
-        <!--            android:id="@+id/btn_select_time"-->
-        <!--            style="@style/borderButton"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="@dimen/dp64"-->
-        <!--            android:layout_marginTop="@dimen/margin_16dp"-->
-        <!--            android:hint="@string/select_time"-->
-        <!--            android:textAlignment="textStart"-->
-        <!--            android:textColor="@color/hint_color"-->
-        <!--            android:textColorHint="@color/hint_color"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/btnn_select_date"-->
-        <!--            app:strokeColor="@color/primary_light" />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_date_picker"
@@ -130,7 +106,7 @@
                     android:layout_marginStart="@dimen/margin_8dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="08"
+                    android:text="@string/_00"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +119,7 @@
                     android:layout_marginStart="@dimen/margin_6dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="Feb 22"
+                    android:text="@string/test_date"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_date_day"
@@ -166,7 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik2"
-                    android:text="13"
+                    android:text="@string/_00"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -179,7 +155,7 @@
                     android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text=":"
+                    android:text="@string/semicolon"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -195,7 +171,7 @@
                     android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="32"
+                    android:text="@string/_00"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -217,7 +193,7 @@
             android:layout_marginEnd="@dimen/margin_16dp"
             android:paddingStart="@dimen/margin_16dp"
             android:paddingEnd="@dimen/margin_16dp"
-            android:text="Choose Category"
+            android:text="@string/choose_category"
             android:textColor="@color/hint_color_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -230,12 +206,13 @@
             android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginTop="@dimen/margin_8dp"
             android:layout_marginEnd="@dimen/margin_16dp"
-            android:paddingLeft="@dimen/margin_24dp"
+            android:paddingStart="@dimen/margin_24dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_select_category"
             app:spanCount="3"
+            tools:ignore="RtlSymmetry"
             tools:listitem="@layout/item_theme" />
 
 

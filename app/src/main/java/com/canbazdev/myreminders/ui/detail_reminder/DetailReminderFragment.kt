@@ -20,6 +20,7 @@ import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.enum.Categories
+import com.canbazdev.myreminders.util.helpers.BackButtonHelper
 import com.canbazdev.myreminders.util.hideKeyboard
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
@@ -33,7 +34,8 @@ import java.util.*
 
 @DelicateCoroutinesApi
 class DetailReminderFragment :
-    BaseFragment<FragmentDetailReminderBinding>(R.layout.fragment_detail_reminder) {
+    BaseFragment<FragmentDetailReminderBinding>(R.layout.fragment_detail_reminder),
+    BackButtonHelper {
 
     private val args: DetailReminderFragmentArgs by navArgs()
 
@@ -221,6 +223,10 @@ class DetailReminderFragment :
 
         }
 
+        binding.ivBackButton.setOnClickListener {
+            clickBackButton()
+        }
+
     }
 
     private fun goToRemindersFragmentFromDetailFragment() {
@@ -257,6 +263,10 @@ class DetailReminderFragment :
     override fun onDestroyView() {
         leftTimeCountDownTimer!!.cancel()
         super.onDestroyView()
+    }
+
+    override fun clickBackButton() {
+        findNavController().navigate(R.id.action_detailReminderFragment_to_reminderFragment)
     }
 
 }

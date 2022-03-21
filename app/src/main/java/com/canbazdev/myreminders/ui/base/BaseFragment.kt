@@ -14,6 +14,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.util.enum.Months
+import com.canbazdev.myreminders.util.helpers.Time
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.text.ParseException
@@ -22,7 +23,7 @@ import java.util.*
 
 @DelicateCoroutinesApi
 abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutResId: Int) :
-    Fragment() {
+    Fragment(), Time {
     private var _binding: DB? = null
     val binding: DB get() = _binding!!
 
@@ -122,37 +123,12 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         val split = time.split(":")
         var hours = split[0]
         var minutes = split[1]
-        if (hours.toInt() < 10) hours = "0$hours"
-        if (minutes.toInt() < 10) minutes = "0$minutes"
+        if (hours.toInt() < 10 && hours.length == 1) hours = "0$hours"
+        if (minutes.toInt() < 10 && hours.length == 1) minutes = "0$minutes"
         return "$hours:$minutes"
     }
 
-    open fun convertMinutesToMilliseconds(hour: String, minutes: String): Int {
-        var milliseconds = 0
-        milliseconds += (minutes.toInt() * 60000)
-        milliseconds += (hour.toInt() * 60000 * 60)
-        return milliseconds
-    }
 
-    open fun calculateMillisecondsFromDateAndTime(date: String?, time: String): Long {
-        //String date_ = date;
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
-        try {
-            val mDate: Date = sdf.parse(date!!)!!
-            var timeInMilliseconds = mDate.time
-
-            val split = time.split(":")
-            val hour = split[0].trim()
-            val min = split[1].trim()
-            timeInMilliseconds += convertMinutesToMilliseconds(hour, min)
-
-            return timeInMilliseconds
-        } catch (e: ParseException) {
-
-            e.printStackTrace()
-        }
-        return 0
-    }
 
 
 }

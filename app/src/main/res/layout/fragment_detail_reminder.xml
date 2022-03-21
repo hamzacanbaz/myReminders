@@ -33,11 +33,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/iv_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/back_arrow"
+                android:src="@drawable/ic_baseline_arrow_back" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_32dp"
                 android:fontFamily="@font/rubik3"
-                android:text="Reminder Detail"
+                android:text="@string/reminder_detail"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp20"
                 android:textStyle="bold" />
@@ -94,7 +102,6 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold"
                 android:translationZ="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="0"
+                android:text="@string/_0"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -119,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="00"
+                android:text="@string/_00"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -132,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="00"
+                android:text="@string/_00"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -144,8 +151,8 @@
                 android:id="@+id/tv_leftTime_seconds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_bold"
-                android:text="00"
+                android:fontFamily="@font/roboto"
+                android:text="@string/_00"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -244,7 +251,7 @@
                     android:layout_marginStart="@dimen/margin_8dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="08"
+                    android:text="@string/_08"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -257,7 +264,7 @@
                     android:layout_marginStart="@dimen/margin_6dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="Feb 22"
+                    android:text="@string/test_date"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_date_day"
@@ -280,7 +287,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik2"
-                    android:text="13"
+                    android:text="@string/_00"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -293,7 +300,7 @@
                     android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text=":"
+                    android:text="@string/semicolon"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -309,7 +316,7 @@
                     android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="32"
+                    android:text="@string/_00"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -319,67 +326,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <!--        <Button-->
-        <!--            android:id="@+id/btn_select_date"-->
-        <!--            style="@style/borderButton"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="@dimen/dp64"-->
-        <!--            android:layout_marginTop="@dimen/margin_16dp"-->
-        <!--            android:hint="@string/select_date"-->
-        <!--            android:textAlignment="textStart"-->
-        <!--            android:textColorHint="@color/hint_color"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/til_title"-->
-        <!--            app:strokeColor="@color/primary_light" />-->
-
-        <!--        <Button-->
-        <!--            android:id="@+id/btn_select_time"-->
-        <!--            style="@style/borderButton"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="@dimen/dp64"-->
-        <!--            android:layout_marginTop="@dimen/margin_16dp"-->
-        <!--            android:hint="@string/select_time"-->
-        <!--            android:textAlignment="textStart"-->
-        <!--            android:textColorHint="@color/hint_color"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/btn_select_date"-->
-        <!--            app:strokeColor="@color/primary_light" />-->
-        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--            android:id="@+id/cl_time_picker"-->
-        <!--            android:layout_width="75dp"-->
-        <!--            android:layout_height="75dp"-->
-        <!--            android:layout_marginTop="@dimen/margin_48dp"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@+id/cl_date_picker"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/cl_left_time">-->
-
-        <!--            <View-->
-        <!--                android:id="@+id/v_time_top_view"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="5dp"-->
-        <!--                android:layout_marginBottom="@dimen/margin_8dp"-->
-        <!--                android:background="@drawable/background_date_time_pick_top_view"-->
-        <!--                android:orientation="horizontal"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="0dp"-->
-        <!--                android:background="@drawable/background_date_time_pick"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                app:layout_constraintTop_toBottomOf="@+id/v_time_top_view">-->
-
-
-        <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
 
         <Button
             android:id="@+id/btnSaveReminder"
@@ -432,7 +378,7 @@
             android:layout_marginStart="160dp"
             android:layout_marginTop="@dimen/margin_48dp"
             android:layout_marginEnd="160dp"
-            android:contentDescription="category_photo"
+            android:contentDescription="@string/category_photo"
             android:src="@drawable/family"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -32,7 +32,7 @@
             android:layout_marginTop="@dimen/margin_24dp"
             android:layout_marginEnd="@dimen/margin_24dp"
             android:fontFamily="@font/rubik3"
-            android:text="We want to know your name"
+            android:text="@string/we_want_to_know_your_name"
             android:textColor="@color/white"
             android:textSize="@dimen/sp24"
             android:textStyle="bold"
@@ -67,19 +67,19 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/tv_previous_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_24dp"
-            android:layout_marginBottom="@dimen/margin_24dp"
-            android:fontFamily="@font/rubik3"
-            android:text="Previous"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp20"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_previous_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="@dimen/margin_24dp"-->
+        <!--            android:layout_marginBottom="@dimen/margin_24dp"-->
+        <!--            android:fontFamily="@font/rubik3"-->
+        <!--            android:text="Previous"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:textSize="@dimen/sp20"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
 
         <TextView
