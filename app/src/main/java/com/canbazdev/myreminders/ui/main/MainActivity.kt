@@ -11,17 +11,17 @@ import androidx.navigation.findNavController
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.ui.add_reminder.AddReminderFragment
 import com.canbazdev.myreminders.ui.add_reminder.AddReminderFragmentDirections
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
 @DelicateCoroutinesApi
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         installSplashScreen()
         setContentView(R.layout.activity_main)

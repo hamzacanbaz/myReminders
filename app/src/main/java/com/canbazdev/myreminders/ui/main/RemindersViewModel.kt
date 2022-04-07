@@ -7,29 +7,40 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.canbazdev.myreminders.model.Reminder
+import com.canbazdev.myreminders.repository.DataStoreRepository
 import com.canbazdev.myreminders.repository.ReminderRepository
-import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.util.Event
-import kotlinx.coroutines.DelicateCoroutinesApi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
-@DelicateCoroutinesApi
-class RemindersViewModel(
-    private val repository: ReminderRepository,
-    private val sharedPrefRepository: SharedPrefRepository
+// binding adap. viewmodelden fragmentta göster.
+// vm. bir fonk. b.a. ile tetikle
+// text içine ne giderse gitsin b.a'de upper case'e dönüştür oradan fragment
+// sharedviewmodel bindingadapter!!!!!!!
+// activityviewmodel navgraphviewmodel androidviewmodel!!!!!!!!!!!!
+
+@HiltViewModel
+class RemindersViewModel @Inject constructor(
+    private val dataStoreRepository: DataStoreRepository,
+    private val repository: ReminderRepository
 ) : ViewModel() {
 
     private val _statusMessage = MutableLiveData<Event<String>>()
 
     val toastMessage: LiveData<Event<String>>
         get() = _statusMessage
-    private val _savedName = MutableLiveData<String>()
 
+    private val _savedName = MutableLiveData<String>()
     val savedName: LiveData<String>
         get() = _savedName
 
@@ -41,16 +52,29 @@ class RemindersViewModel(
         getCurrentDateWithNormalFormat()
     )
     val closestReminderToday: LiveData<Reminder> =
-        getClosestReminderToday(getCurrentDateWithNormalFormat(), getCurrentTimeWithNormalFormat())
+        MutableLiveData()
+
+    private val _todaysRemindersCount = MutableLiveData<Int>()
+    val todaysRemindersCount: LiveData<Int>
+        get() = _todaysRemindersCount
+
+
+    //    var getSavedNameFirstTime: Boolean = false
+    private val _getSavedNameFirstTime = MutableLiveData<Boolean>()
+    val getSavedNameFirstTime: LiveData<Boolean>
+        get() = _getSavedNameFirstTime
+
 
     //    private val mShowProgressBarUserInfo: MutableLiveData<Boolean> = MutableLiveData(true)
     //    val showProgressBarUserInfo: LiveData<Boolean> get() = mShowProgressBarUserInfo
-    var isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
 
 
     init {
-        isLoading.value = true
         getNameFirstTime()
+        getSavedNameFirstTime()
+        getTodaysReminderCount()
+
     }
 
     fun insertReminder(reminder: Reminder) {
@@ -94,29 +118,60 @@ class RemindersViewModel(
         return repository.getClosestReminderToday(currentDate, currentTime)
     }
 
-    private fun getSavedDataFirstTime(): Boolean {
-        return sharedPrefRepository.getDataFirstTime()
-    }
 
-    private fun setSavedDataFirstTime(savedFirstTime: Boolean) {
-        sharedPrefRepository.setDataFirstTime(savedFirstTime)
-    }
+    fun getSavedNameFirstTime() {
+        viewModelScope.launch {
+            dataStoreRepository.getSavedNameFirstTime.collect {
+                println("saved $it")
+                _getSavedNameFirstTime.value = it
+            }
+            while (true) {
+                delay(30000L)
+                dataStoreRepository.setSavedNameFirstTime(true)
+            }
+        }
 
-    fun getSavedNameFirstTime(): Boolean {
-        return sharedPrefRepository.getNameFirstTime()
+
     }
 
     fun setSavedNameFirstTime(savedFirstTime: Boolean) {
-        sharedPrefRepository.setNameFirstTime(savedFirstTime)
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.setSavedNameFirstTime(savedFirstTime)
+        }
     }
 
     fun setNameFirstTime(nameText: String) {
-        sharedPrefRepository.setNameFirstText(nameText)
+        viewModelScope.launch {
+            dataStoreRepository.setSavedName(nameText)
+        }
     }
 
     fun getNameFirstTime() {
-        _savedName.value = sharedPrefRepository.getNameFirstText()
+        viewModelScope.launch {
+            dataStoreRepository.getSavedName.collectLatest {
+                _savedName.value = it
+
+            }
+
+        }
     }
+
+
+    fun setTodaysReminderCount(count: Int) {
+        viewModelScope.launch {
+            dataStoreRepository.setTodayReminderCount(count)
+        }
+    }
+
+    fun getTodaysReminderCount() {
+        viewModelScope.launch {
+            dataStoreRepository.getTodayReminderCount.collectLatest {
+                _todaysRemindersCount.value = it
+
+            }
+        }
+    }
+
 
     fun splitDateStringIntoString(dateString: String): List<String> {
         // Feb 21, 2022

@@ -7,7 +7,6 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.canbazdev.myreminders.R
-import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.main.MainActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -20,14 +19,19 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val sharedPrefRepository = SharedPrefRepository(context)
+//        val dataStoreRepository = DataStoreRepository(context)
         // TODO intent ile alınacak şeyleri al
 //        println("receiveeee")
 //        Toast.makeText(context, "Alarm received Successfully", Toast.LENGTH_SHORT).show()
         val i = Intent(context, MainActivity::class.java)
         val notificationTitle = "Todays Reminders"
-        val notificationText =
-            "You have ${sharedPrefRepository.getTodayRemindersCount()} reminders today."
+        var notificationText = ""
+//        CoroutineScope(Dispatchers.Main.immediate).launch {
+//            dataStoreRepository.getTodayReminderCount.collectLatest { count ->
+//                notificationText = "You have $count reminders today."
+//
+//            }
+//        }
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, i, 0)
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(context, "foxandroid")

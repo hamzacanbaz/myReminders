@@ -1,6 +1,5 @@
 package com.canbazdev.myreminders.ui.add_reminder
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
@@ -12,13 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.adapter.CategoryAdapter
-import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentAddReminderBinding
 import com.canbazdev.myreminders.model.Category
 import com.canbazdev.myreminders.model.Reminder
-import com.canbazdev.myreminders.repository.ReminderRepository
-import com.canbazdev.myreminders.repository.SharedPrefRepository
-import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.enum.Categories
@@ -28,11 +23,13 @@ import com.canbazdev.myreminders.util.intResourceToString
 import com.canbazdev.myreminders.util.toUpperCase
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
 @DelicateCoroutinesApi
+@AndroidEntryPoint
 class AddReminderFragment :
     BaseFragment<FragmentAddReminderBinding>(R.layout.fragment_add_reminder),
     AdapterView.OnItemSelectedListener, CategoryAdapter.OnCategoryClickedListener,
@@ -50,13 +47,8 @@ class AddReminderFragment :
     private lateinit var rvCategories: RecyclerView
     private var selectedCategory = Categories.OTHER.ordinal
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val reminderDao = ReminderDatabase.getDatabase(requireContext()).reminderDao()
-        val repository = ReminderRepository(reminderDao)
-        val sharedPrefRepository = SharedPrefRepository(requireContext())
-
 
         pickedEventTime =
             "${mcurrentTime.get(Calendar.HOUR_OF_DAY)}:${mcurrentTime.get(Calendar.MINUTE)}"
@@ -67,9 +59,7 @@ class AddReminderFragment :
                 mcurrentTime.get(Calendar.YEAR)
             }"
 
-        val viewModel: RemindersViewModel by viewModels {
-            ViewModelFactory(repository, sharedPrefRepository)
-        }
+        val viewModel: RemindersViewModel by viewModels()
 
         showInitialDateAndTime()
 

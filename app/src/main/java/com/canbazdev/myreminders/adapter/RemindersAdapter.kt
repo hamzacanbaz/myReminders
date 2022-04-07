@@ -36,9 +36,9 @@ class RemindersAdapter(
             itemView.setOnClickListener(this)
         }
 
-        fun formatDateToWithMonth(date: String): String {
+        private fun formatDateToWithMonth(date: String): String {
             val split = date.split("/")
-            var day = split[0]
+            val day = split[0]
             val month = split[1].toInt()
             val year = split[2]
 

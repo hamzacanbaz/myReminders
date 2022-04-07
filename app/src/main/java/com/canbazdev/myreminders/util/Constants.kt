@@ -2,7 +2,7 @@ package com.canbazdev.myreminders.util
 
 object Constants {
     const val PREFERENCE_NAME = "REMINDERS"
-
+    const val USER_PREFERENCES = "user_prefs"
     const val DATA_SAVED_FIRST_TIME = "FIRST_TIME"
     const val NAME_SAVED_FIRST_TIME = "NAME_FIRST_TIME"
     const val NAME_FIRST_TIME = "NAME_TIME"

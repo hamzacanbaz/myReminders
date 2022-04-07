@@ -10,41 +10,84 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.broadcastReceiver.AlarmReceiver
-import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentOnboardingFirstBinding
-import com.canbazdev.myreminders.repository.ReminderRepository
-import com.canbazdev.myreminders.repository.SharedPrefRepository
-import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
 @DelicateCoroutinesApi
+@AndroidEntryPoint
 class OnBoardingFragment :
     BaseFragment<FragmentOnboardingFirstBinding>(R.layout.fragment_onboarding_first) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val reminderDao = ReminderDatabase.getDatabase(requireContext()).reminderDao()
-        val repository = ReminderRepository(reminderDao)
-        val sharedPrefRepository = SharedPrefRepository(requireContext())
+        val viewModel: RemindersViewModel by viewModels()
 
-        val viewModel: RemindersViewModel by viewModels {
-            ViewModelFactory(repository, sharedPrefRepository)
+
+//        lifecycleScope.launch {
+//            dataStoreRepository.getSavedNameFirstTime.collect {
+//                if (it){
+//                    findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
+//                }
+//            }
+//        }
+
+        // Çalışmıyordu ama şimdi nasıl çalışıyor anlamadım
+        viewModel.getSavedNameFirstTime.observe(
+            viewLifecycleOwner
+        ) { isSaved ->
+            if (isSaved) {
+                findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
+            }
         }
 
-        if (viewModel.getSavedNameFirstTime()) {
-            findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
-        }
+
+        // Test amacli yazdim
+//        lifecycleScope.launch {
+//            dataStoreRepository.getSavedNameFirstTime.collectLatest {
+//                binding.etName.setText(it.toString())
+//            }
+//        }
+//
+//        lifecycleScope.launch {
+//            dataStoreRepository.getSavedNameFirstTime.collect {
+//                println(it)
+//            }
+//        }
+
 
         binding.tvNextButton.setOnClickListener {
+            // TODO burada iki farklı metod olarak çağırınca doğru çalışmıyor neden
+//                viewModel.setNameFirstTime(binding.etName.text.toString().trim())
+
             viewModel.setNameFirstTime(binding.etName.text.toString().trim())
             viewModel.setSavedNameFirstTime(true)
+
+            //VEYA
+
+//                dataStoreRepository.setSavedName(binding.etName.text.toString().trim())
+//                dataStoreRepository.setSavedNameFirstTime(true)
+
+//            lifecycleScope.launch {
+//                viewModel.setSavedNameFirstTime(true)
+//            }
+
+
+//            viewModel.setSavedNameFirstTime(true)
             // TODO remindersfragmenttaki setAlarm() metodunu kaldır buradakini aktif et
+
             setAlarm()
-            findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
+            try {
+                findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
+            } catch (l: IllegalArgumentException) {
+                println(l.localizedMessage)
+            }
+
+//            viewModel.setSavedNameFirstTime(true)
         }
 
         super.onViewCreated(view, savedInstanceState)

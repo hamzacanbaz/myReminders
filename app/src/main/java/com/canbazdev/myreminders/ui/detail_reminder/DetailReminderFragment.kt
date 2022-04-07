@@ -12,11 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.canbazdev.myreminders.R
-import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentDetailReminderBinding
-import com.canbazdev.myreminders.repository.ReminderRepository
-import com.canbazdev.myreminders.repository.SharedPrefRepository
-import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import com.canbazdev.myreminders.util.enum.Categories
@@ -28,11 +24,13 @@ import com.irozon.alertview.AlertActionStyle
 import com.irozon.alertview.AlertStyle
 import com.irozon.alertview.AlertView
 import com.irozon.alertview.objects.AlertAction
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
 @DelicateCoroutinesApi
+@AndroidEntryPoint
 class DetailReminderFragment :
     BaseFragment<FragmentDetailReminderBinding>(R.layout.fragment_detail_reminder),
     BackButtonHelper {
@@ -49,13 +47,8 @@ class DetailReminderFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val reminderDao = ReminderDatabase.getDatabase(requireContext()).reminderDao()
-        val repository = ReminderRepository(reminderDao)
-        val sharedPrefRepository = SharedPrefRepository(requireContext())
 
-        val viewModel: RemindersViewModel by viewModels {
-            ViewModelFactory(repository, sharedPrefRepository)
-        }
+        val viewModel: RemindersViewModel by viewModels()
 
         args.let {
             binding.reminder = args.reminder
@@ -116,6 +109,9 @@ class DetailReminderFragment :
                     binding.tvExpired.text = getString(R.string.this_reminder_has_expired)
                 }
             }.start()
+
+
+
 
         if (isEnded) {
             binding.btnSelectDate.isEnabled = false

@@ -16,12 +16,10 @@ import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.util.enum.Months
 import com.canbazdev.myreminders.util.helpers.Time
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-@DelicateCoroutinesApi
 abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutResId: Int) :
     Fragment(), Time {
     private var _binding: DB? = null

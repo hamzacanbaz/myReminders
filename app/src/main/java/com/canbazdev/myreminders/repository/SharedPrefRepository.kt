@@ -11,6 +11,7 @@ import com.canbazdev.myreminders.util.Constants.PREFERENCE_NAME
 import com.canbazdev.myreminders.util.Constants.TODAY_REMINDERS
 import com.canbazdev.myreminders.util.Constants.WIDGET_ID
 
+// Not used now
 class SharedPrefRepository(context: Context) {
 
     private val pref: SharedPreferences =

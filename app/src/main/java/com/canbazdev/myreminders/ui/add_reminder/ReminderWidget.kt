@@ -11,7 +11,6 @@ import android.widget.RemoteViews
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.repository.ReminderRepository
-import com.canbazdev.myreminders.repository.SharedPrefRepository
 import com.canbazdev.myreminders.ui.main.MainActivity
 import com.canbazdev.myreminders.util.helpers.Time
 import kotlinx.coroutines.CoroutineScope
@@ -51,12 +50,11 @@ class ReminderWidget : AppWidgetProvider(), Time {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        println("receive")
         super.onReceive(context, intent)
         if (intent != null) {
             if (intent.action == "click") {
                 val intentOpenApp = Intent(context, MainActivity::class.java)
-                intentOpenApp.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intentOpenApp.addFlags(FLAG_ACTIVITY_NEW_TASK)
                 context?.startActivity(intentOpenApp)
             }
         }
@@ -72,24 +70,48 @@ class ReminderWidget : AppWidgetProvider(), Time {
         Log.i("ReminderWidget", "Widget updateAppWidget id: $appWidgetId")
         // TODO TARIHI GUNCELLE
 
-        val sharedPrefRepository = SharedPrefRepository(context)
-        sharedPrefRepository.setWidgetId(appWidgetId)
+        // TODO DataStoreRepository ekle
 
+//        val dataStoreRepository = DataStoreRepository(context)
+
+//        CoroutineScope(Dispatchers.Main.immediate).launch {
+//            dataStoreRepository.setWidgetId(appWidgetId)
+//
+//        }
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val currentDate = dateFormat.format(Date())
 
         val reminderDao = ReminderDatabase.getDatabase(context).reminderDao()
         val repository = ReminderRepository(reminderDao)
-        val list = repository.getTodaysAllRemindersForWidget(currentDate)
 
         CoroutineScope(Dispatchers.Main.immediate).launch {
-            println("coroutine scopeeeee")
+            val allReminders = reminderDao.getAllRemindersForWidget(currentDate)
+            var flag = 0
+            var index = 0
+            var betweenTime2 = ""
+            val date2 = Date().time
+            while (flag == 0 && index < allReminders.size) {
+                val milli =
+                    calculateMillisecondsFromDateAndTime(
+                        allReminders[index].date,
+                        allReminders[index].time
+                    )
+                betweenTime2 = formatMilliSecondsToTime(milli - date2)
+                if (betweenTime2.isNotEmpty() && betweenTime2 != "") {
+                    flag = 1
+                }
+                index++
+            }
+            if (betweenTime2.isNotBlank() && betweenTime2.isNotEmpty()) {
+                Log.e("ReminderWidget", "Not blank or empty")
+            }
+
+
             val closestReminder = reminderDao.getClosestReminderTodayForWidget(
                 currentDate,
                 getCurrentTimeWithNormalFormat()
             )
-            println("rem2" + closestReminder)
             val millisecondsBetweenReminderAndNow =
                 calculateMillisecondsFromDateAndTime(closestReminder.date, closestReminder.time)
             val date = Date().time
@@ -98,8 +120,6 @@ class ReminderWidget : AppWidgetProvider(), Time {
             val views = RemoteViews(context.packageName, R.layout.left_time_for_widget)
             views.setTextViewText(R.id.tv_widget_title, closestReminder.title)
             val leftTime = betweenTime.split(" ")
-            println("between time" + betweenTime)
-            println("leftTime" + leftTime)
             when (leftTime.size) {
                 4 -> {
                     views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[0])
@@ -121,7 +141,6 @@ class ReminderWidget : AppWidgetProvider(), Time {
 
 //        views.setTextViewText(R.id.tv_leftTime_days, closestReminder.time)
             appWidgetManager.updateAppWidget(appWidgetId, views)
-            println("coroutine scope exit")
         }
 
         val views = RemoteViews(context.packageName, R.layout.left_time_for_widget)
@@ -144,7 +163,6 @@ class ReminderWidget : AppWidgetProvider(), Time {
 
     @DelicateCoroutinesApi
     private fun getPendingSelfIntent(context: Context?, action: String?): PendingIntent? {
-        println("clicked the pendingselfintent")
         val intent = Intent(context, ReminderWidget::class.java)
         intent.action = action
         return PendingIntent.getBroadcast(context, 0, intent, 0)

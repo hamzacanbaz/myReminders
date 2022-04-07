@@ -27,22 +27,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.adapter.ReminderDecoration
 import com.canbazdev.myreminders.adapter.RemindersAdapter
-import com.canbazdev.myreminders.data.local.ReminderDatabase
 import com.canbazdev.myreminders.databinding.FragmentRemindersBinding
 import com.canbazdev.myreminders.model.Reminder
-import com.canbazdev.myreminders.repository.ReminderRepository
-import com.canbazdev.myreminders.repository.SharedPrefRepository
-import com.canbazdev.myreminders.ui.ViewModelFactory
 import com.canbazdev.myreminders.ui.base.BaseFragment
 import com.canbazdev.myreminders.util.enum.Categories
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
 @DelicateCoroutinesApi
-open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
+@AndroidEntryPoint
+class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
     RemindersAdapter.OnItemClickedListener {
 
     private lateinit var rvReminders: RecyclerView
@@ -57,6 +55,8 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         createNotificationChannel()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -65,13 +65,7 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
         super.onViewCreated(view, savedInstanceState)
         progressBar = binding.pbLoadingData
 
-        val reminderDao = ReminderDatabase.getDatabase(requireContext()).reminderDao()
-        val repository = ReminderRepository(reminderDao)
-        val sharedPrefRepository = SharedPrefRepository(requireContext())
-
-        val viewModel: RemindersViewModel by viewModels {
-            ViewModelFactory(repository, sharedPrefRepository)
-        }
+        val viewModel: RemindersViewModel by viewModels()
 //        setAlarm()
 
 
@@ -100,7 +94,7 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
 
             alertDialog.findViewById<Button>(R.id.btn_save_name).setOnClickListener {
                 val name = etAlertDialogName.text.toString()
-                sharedPrefRepository.setNameFirstText(name)
+                viewModel.setNameFirstTime(name)
                 showShortToast(getString(R.string.name_saved))
                 builder.dismiss()
                 viewModel.getNameFirstTime()
@@ -111,7 +105,8 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
 
         }
 
-        observeReminderList(viewModel, sharedPrefRepository)
+        observeReminderList(viewModel)
+
 
         viewModel.todaysReminderList.observe(viewLifecycleOwner) {
 
@@ -126,7 +121,11 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
                 binding.tvTodayReminderNumbers.text =
                     resources.getString(R.string.you_have_no_reminders)
             }
-            sharedPrefRepository.setTodayRemindersCount(todayReminderNumber)
+
+            viewModel.setTodaysReminderCount(todayReminderNumber)
+        }
+        viewModel.todaysRemindersCount.observe(viewLifecycleOwner) {
+            println("countttt $it")
         }
 
         viewModel.closestReminderToday.observe(viewLifecycleOwner) { reminder ->
@@ -161,7 +160,7 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
         }
 
         setUpSwipeToDeleteReminders(viewModel)
-
+// datastore
         viewModel.savedName.observe(viewLifecycleOwner) {
             binding.tvHelloName.text = String.format(resources.getString(R.string.hello_x), it)
         }
@@ -169,8 +168,7 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
     }
 
     fun observeReminderList(
-        viewModel: RemindersViewModel,
-        sharedPrefRepository: SharedPrefRepository
+        viewModel: RemindersViewModel
     ) {
         viewModel.reminderList.observe(viewLifecycleOwner) { reminderList ->
 //            sendNotification("MyReminders", "${it.size} adet reminder var", R.drawable.friendship)
@@ -250,9 +248,12 @@ open class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.f
                     )
 //                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
                 }
-
-                val widgetId = sharedPrefRepository.getWidgetId()
-                appWidgetManager.updateAppWidget(widgetId, views)
+//                CoroutineScope(Dispatchers.Main.immediate).launch {
+//                    dataStoreRepository.getWidgetId.collect { widgetId ->
+//                        appWidgetManager.updateAppWidget(widgetId, views)
+//                    }
+//
+//                }
 
             } else {
                 binding.rvReminders.visibility = View.GONE
