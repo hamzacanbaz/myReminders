@@ -48,7 +48,7 @@
         tools:layout="@layout/fragment_detail_reminder">
         <argument
             android:name="reminder"
-            app:argType="com.canbazdev.myreminders.model.Reminder"
+            app:argType="com.canbazdev.myreminders.data.model.Reminder"
             app:nullable="true" />
         <action
             android:id="@+id/action_detailReminderFragment_to_reminderFragment"

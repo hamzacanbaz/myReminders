@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.canbazdev.myreminders.data.local.dao.ReminderDao
-import com.canbazdev.myreminders.model.Reminder
+import com.canbazdev.myreminders.data.model.Reminder
 
 
 @Database(entities = [Reminder::class], version = 5, exportSchema = false)

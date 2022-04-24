@@ -1,4 +1,4 @@
-package com.canbazdev.myreminders.repository
+package com.canbazdev.myreminders.data.repository
 
 import android.content.Context
 import androidx.datastore.core.DataStore

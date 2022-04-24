@@ -1,22 +1,21 @@
-package com.canbazdev.myreminders.repository
+package com.canbazdev.myreminders.data.repository
 
-import androidx.lifecycle.LiveData
 import com.canbazdev.myreminders.data.local.dao.ReminderDao
-import com.canbazdev.myreminders.model.Reminder
+import com.canbazdev.myreminders.data.model.Reminder
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ReminderRepository @Inject constructor(private val reminderDao: ReminderDao) {
-    fun getAllReminders(): LiveData<List<Reminder>> = reminderDao.getAllReminders()
+    suspend fun getAllReminders(): List<Reminder> = reminderDao.getAllReminders()
 
-    fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>> =
+    suspend fun getTodaysAllReminders(currentDate: String): List<Reminder> =
         reminderDao.getTodaysAllReminders(currentDate)
 
     fun getTodaysAllRemindersForWidget(currentDate: String): List<Reminder> =
         reminderDao.getTodaysAllRemindersForWidget(currentDate)
 
-    fun getClosestReminderToday(currentDate: String, currentTime: String): LiveData<Reminder> =
+    suspend fun getClosestReminderToday(currentDate: String, currentTime: String): Reminder? =
         reminderDao.getClosestReminderToday(currentDate, currentTime)
 
     suspend fun insertReminder(reminder: Reminder) = reminderDao.insertReminder(reminder)

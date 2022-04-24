@@ -48,6 +48,9 @@
     <!-- Placeholders -->
     <string name="text_view_month_and_year">%1$s %2$s</string>
     <string name="today_you_have_x_reminders">Bugun %1$s hatirlaticin var</string>
+    <string name="you_have_x_reminders_today">Bugün %1$d hatırlatıcın var</string>
+    <string name="you_have_1_reminder_today">Bugün 1 hatırlatıcın var</string>
+    <string name="you_have_no_reminder_today">Bugün hatırlatıcın yok</string>
     <string name="hello_x">Merhaba %1$s</string>
     <string name="minutes">Dakika</string>
     <string name="seconds">Saniye</string>

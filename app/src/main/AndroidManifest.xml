@@ -25,7 +25,9 @@
                 android:resource="@xml/reminder_widget_info" />
         </receiver>
 
-        <receiver android:name=".broadcastReceiver.AlarmReceiver" />
+        <receiver
+            android:name=".broadcastReceiver.AlarmReceiver"
+            android:enabled="true" />
 
         <activity
             android:name=".ui.main.MainActivity"

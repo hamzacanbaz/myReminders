@@ -2,23 +2,17 @@ package com.canbazdev.myreminders.ui.base
 
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import com.canbazdev.myreminders.R
-import com.canbazdev.myreminders.util.enum.Months
 import com.canbazdev.myreminders.util.helpers.Time
+import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 
 abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutResId: Int) :
     Fragment(), Time {
@@ -33,7 +27,7 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.lifecycleOwner = this
         binding.initialize()
 
         return _binding!!.root
@@ -41,7 +35,6 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
 
     override fun onDestroyView() {
         _binding = null
-        println("ondestroy from base")
         super.onDestroyView()
     }
 
@@ -58,73 +51,26 @@ abstract class BaseFragment<DB : ViewDataBinding>(@LayoutRes private val layoutR
         return if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
     }
 
-    fun datePickerFormatToNormalFormat(text: String): String {
 
-        val inputFormat = SimpleDateFormat(R.string.input_date_format.toString(), Locale.US)
-        val outputFormat = SimpleDateFormat(R.string.output_date_format.toString(), Locale.US)
-        val date: Date?
-        var outputDate: String? = " "
+    fun timePickerBuilder(
+        hour: Int,
+        minute: Int,
+        timeFormat: Int,
+        title: String,
 
-        try {
-            date = inputFormat.parse(text)
-            outputDate = outputFormat.format(date!!)
-            Log.e("Log ", "str $outputDate")
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
-        return "$outputDate/00/00/00"
+        ): MaterialTimePicker {
+        return MaterialTimePicker.Builder()
+            .setTimeFormat(timeFormat)
+            .setHour(hour)
+            .setMinute(minute)
+            .setTitleText(title)
+            .build()
     }
 
-    fun showDate(tvDay: TextView, tvMonth: TextView, date: String) {
-
-        val split = date.split("/")
-        var day = split[0]
-        val month = split[1].toInt()
-        val year = split[2]
-
-        day = if (day.length < 2) "0$day" else day
-        val monthText: String = Months.values()[month - 1].toString()
-
-        tvDay.text = day
-        tvMonth.text =
-            String.format(resources.getString(R.string.text_view_month_and_year), monthText, year)
-
-    }
-
-    fun showTime(tvHour: TextView, tvMinute: TextView, hour: Int, minute: Int) {
-        val displayedHour: String = if (hour.toString().length < 2) "0$hour" else "$hour"
-        val displayedMinute: String = if (minute.toString().length < 2) "0$minute" else "$minute"
-
-        tvHour.text = displayedHour
-        tvMinute.text = displayedMinute
 
 
-    }
 
-    fun formatDate(date: String): String {
-        val split = date.split("/")
-        var newFormattedDateString = ""
-        val day = split[0].toInt()
-        val month = split[1].toInt()
-        val year = split[2].toInt()
 
-        newFormattedDateString += if (day < 10) "0$day/" else "$day/"
-        newFormattedDateString += if (month < 10) "0$month/" else "$month/"
-
-        newFormattedDateString += "$year"
-        return newFormattedDateString
-
-    }
-
-    fun formatTime(time: String): String {
-        val split = time.split(":")
-        var hours = split[0]
-        var minutes = split[1]
-        if (hours.toInt() < 10 && hours.length == 1) hours = "0$hours"
-        if (minutes.toInt() < 10 && hours.length == 1) minutes = "0$minutes"
-        return "$hours:$minutes"
-    }
 
 
 

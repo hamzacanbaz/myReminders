@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
+import com.canbazdev.myreminders.data.model.Category
 import com.canbazdev.myreminders.databinding.ItemThemeBinding
-import com.canbazdev.myreminders.model.Category
 
 
 class CategoryAdapter(

@@ -51,6 +51,9 @@
 
     <string name="text_view_month_and_year">%1$s %2$s</string>
     <string name="today_you_have_x_reminders">Today you have %1$s reminders</string>
+    <string name="you_have_x_reminders_today">You have %1$d reminders today</string>
+    <string name="you_have_1_reminder_today">You have 1 reminder today</string>
+    <string name="you_have_no_reminder_today">You have no reminder today</string>
     <string name="hello_x">Hello %1$s</string>
     <string name="minutes">Minutes</string>
     <string name="seconds">Seconds</string>

@@ -12,11 +12,8 @@ import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.ui.add_reminder.AddReminderFragment
 import com.canbazdev.myreminders.ui.add_reminder.AddReminderFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DelicateCoroutinesApi
-import java.util.*
 
 
-@DelicateCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -65,9 +62,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setLocal(activity: MainActivity, langCode: String) {
-        val locale = Locale(langCode)
-
-    }
 
 }

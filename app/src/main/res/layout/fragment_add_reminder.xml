@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.canbazdev.myreminders.ui.add_reminder.AddReminderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,7 +109,7 @@
                     android:layout_marginStart="@dimen/margin_8dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="@string/_00"
+                    android:text="@{viewModel.showDay}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +122,8 @@
                     android:layout_marginStart="@dimen/margin_6dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="@string/test_date"
+
+                    android:text="@{viewModel.showMonth}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_date_day"
@@ -142,11 +146,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik2"
-                    android:text="@string/_00"
+                    android:text="@{viewModel.displayedHour}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="00" />
 
                 <TextView
                     android:id="@+id/tv_time_between"
@@ -171,12 +176,13 @@
                     android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="@string/_00"
+                    android:text="@{viewModel.displayedMinutes}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_time_between"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="00" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

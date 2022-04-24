@@ -2,115 +2,78 @@ package com.canbazdev.myreminders.ui.onboarding
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.broadcastReceiver.AlarmReceiver
 import com.canbazdev.myreminders.databinding.FragmentOnboardingFirstBinding
 import com.canbazdev.myreminders.ui.base.BaseFragment
-import com.canbazdev.myreminders.ui.main.RemindersViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
-@DelicateCoroutinesApi
 @AndroidEntryPoint
 class OnBoardingFragment :
     BaseFragment<FragmentOnboardingFirstBinding>(R.layout.fragment_onboarding_first) {
 
+    val viewModel: OnBoardingViewModel by viewModels()
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.viewmodel = viewModel
 
-        val viewModel: RemindersViewModel by viewModels()
-
-
-//        lifecycleScope.launch {
-//            dataStoreRepository.getSavedNameFirstTime.collect {
-//                if (it){
-//                    findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
-//                }
-//            }
-//        }
-
-        // Çalışmıyordu ama şimdi nasıl çalışıyor anlamadım
-        viewModel.getSavedNameFirstTime.observe(
-            viewLifecycleOwner
-        ) { isSaved ->
+        viewModel.getSavedNameFirstTime.observe(viewLifecycleOwner) { isSaved ->
             if (isSaved) {
-                findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
+                goToReminderFragment()
+            } else {
+                binding.cl.visibility = View.VISIBLE
             }
         }
 
-
-        // Test amacli yazdim
-//        lifecycleScope.launch {
-//            dataStoreRepository.getSavedNameFirstTime.collectLatest {
-//                binding.etName.setText(it.toString())
-//            }
-//        }
-//
-//        lifecycleScope.launch {
-//            dataStoreRepository.getSavedNameFirstTime.collect {
-//                println(it)
-//            }
-//        }
-
-
-        binding.tvNextButton.setOnClickListener {
-            // TODO burada iki farklı metod olarak çağırınca doğru çalışmıyor neden
-//                viewModel.setNameFirstTime(binding.etName.text.toString().trim())
-
-            viewModel.setNameFirstTime(binding.etName.text.toString().trim())
-            viewModel.setSavedNameFirstTime(true)
-
-            //VEYA
-
-//                dataStoreRepository.setSavedName(binding.etName.text.toString().trim())
-//                dataStoreRepository.setSavedNameFirstTime(true)
-
-//            lifecycleScope.launch {
-//                viewModel.setSavedNameFirstTime(true)
-//            }
-
-
-//            viewModel.setSavedNameFirstTime(true)
-            // TODO remindersfragmenttaki setAlarm() metodunu kaldır buradakini aktif et
-
-            setAlarm()
-            try {
-                findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
-            } catch (l: IllegalArgumentException) {
-                println(l.localizedMessage)
+        viewModel.goToMainFragment.observe(viewLifecycleOwner) {
+            if (it) {
+                setAlarm()
+                goToReminderFragment()
             }
-
-//            viewModel.setSavedNameFirstTime(true)
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun setAlarm() {
-        val calendar = Calendar.getInstance()
-//        if (Calendar.getInstance()[Calendar.HOUR_OF_DAY] > 9) {
-//            calendar.add(Calendar.DAY_OF_YEAR, 1) // add, not set!
-//        }
-        calendar[Calendar.HOUR_OF_DAY] = 8
-        calendar[Calendar.MINUTE] = 0
-        calendar[Calendar.SECOND] = 0
+    private fun goToReminderFragment() {
+        findNavController().navigate(R.id.action_firstFragment_to_reminderFragment)
+    }
+
+    private fun setAlarm() {
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 1)
+            set(Calendar.MINUTE, 0)
+        }
+
 
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(requireContext(), AlarmReceiver::class.java)
-        // TODO intent ile bildirimde gösterilecek şeyleri gönder
-        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, 0)
+        val intent = Intent(requireContext(), AlarmReceiver::class.java).let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(context, 0, it, FLAG_IMMUTABLE)
+            } else {
+                PendingIntent.getBroadcast(context, 0, it, 0)
+            }
+        }
+
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP, (calendar.timeInMillis),
-            AlarmManager.INTERVAL_DAY, pendingIntent
+            1000 * 60 * 2, intent
         )
-//        Toast.makeText(context, "Alarm set Successfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Alarm set Successfully", Toast.LENGTH_SHORT).show()
     }
 
 }

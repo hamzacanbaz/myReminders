@@ -1,4 +1,4 @@
-package com.canbazdev.myreminders.model
+package com.canbazdev.myreminders.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

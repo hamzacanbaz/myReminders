@@ -2,9 +2,9 @@
 //
 //import androidx.lifecycle.ViewModel
 //import androidx.lifecycle.ViewModelProvider
-//import com.canbazdev.myreminders.repository.DataStoreRepository
-//import com.canbazdev.myreminders.repository.ReminderRepository
-//import com.canbazdev.myreminders.repository.SharedPrefRepository
+//import com.canbazdev.myreminders.data.repository.DataStoreRepository
+//import com.canbazdev.myreminders.data.repository.ReminderRepository
+//import com.canbazdev.myreminders.data.repository.SharedPrefRepository
 //import com.canbazdev.myreminders.ui.main.RemindersViewModel
 //import kotlinx.coroutines.DelicateCoroutinesApi
 //

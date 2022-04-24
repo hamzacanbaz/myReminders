@@ -1,26 +1,25 @@
 package com.canbazdev.myreminders.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.canbazdev.myreminders.model.Reminder
+import com.canbazdev.myreminders.data.model.Reminder
 
 @Dao
 interface ReminderDao {
 
     @Query("SELECT * FROM reminder_table ORDER BY date, time ASC")
-    fun getAllReminders(): LiveData<List<Reminder>>
+    suspend fun getAllReminders(): List<Reminder>
 
     @Query("SELECT * FROM reminder_table WHERE date>=:currentDate ORDER BY date, time ASC")
     fun getAllRemindersForWidget(currentDate: String): List<Reminder>
 
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY date AND time ASC")
-    fun getTodaysAllReminders(currentDate: String): LiveData<List<Reminder>>
+    suspend fun getTodaysAllReminders(currentDate: String): List<Reminder>
 
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate ORDER BY time ASC")
     fun getTodaysAllRemindersForWidget(currentDate: String): List<Reminder>
 
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate AND time>:currentTime ORDER BY time ASC LIMIT 1")
-    fun getClosestReminderToday(currentDate: String, currentTime: String): LiveData<Reminder>
+    suspend fun getClosestReminderToday(currentDate: String, currentTime: String): Reminder?
 
     @Query("SELECT * FROM reminder_table WHERE date =:currentDate AND time>:currentTime ORDER BY time ASC LIMIT 1")
     fun getClosestReminderTodayForWidget(currentDate: String, currentTime: String): Reminder

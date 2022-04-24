@@ -10,11 +10,11 @@ import android.util.Log
 import android.widget.RemoteViews
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.data.local.ReminderDatabase
-import com.canbazdev.myreminders.repository.ReminderRepository
+import com.canbazdev.myreminders.data.model.Reminder
+import com.canbazdev.myreminders.data.repository.ReminderRepository
 import com.canbazdev.myreminders.ui.main.MainActivity
 import com.canbazdev.myreminders.util.helpers.Time
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -24,7 +24,7 @@ import java.util.*
 /**
  * Implementation of App Widget functionality.
  */
-@DelicateCoroutinesApi
+
 class ReminderWidget : AppWidgetProvider(), Time {
     override fun onUpdate(
         context: Context,
@@ -61,7 +61,6 @@ class ReminderWidget : AppWidgetProvider(), Time {
     }
 
 
-    @DelicateCoroutinesApi
     internal fun updateAppWidget(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -108,39 +107,43 @@ class ReminderWidget : AppWidgetProvider(), Time {
             }
 
 
-            val closestReminder = reminderDao.getClosestReminderTodayForWidget(
+            val closestReminder: Reminder = reminderDao.getClosestReminderTodayForWidget(
                 currentDate,
                 getCurrentTimeWithNormalFormat()
             )
-            val millisecondsBetweenReminderAndNow =
-                calculateMillisecondsFromDateAndTime(closestReminder.date, closestReminder.time)
-            val date = Date().time
-            val betweenTime = formatMilliSecondsToTime(millisecondsBetweenReminderAndNow - date)
+            if (closestReminder != null) {
+                println("nul degil")
+                val millisecondsBetweenReminderAndNow =
+                    calculateMillisecondsFromDateAndTime(closestReminder.date, closestReminder.time)
+                val date = Date().time
+                val betweenTime = formatMilliSecondsToTime(millisecondsBetweenReminderAndNow - date)
 
-            val views = RemoteViews(context.packageName, R.layout.left_time_for_widget)
-            views.setTextViewText(R.id.tv_widget_title, closestReminder.title)
-            val leftTime = betweenTime.split(" ")
-            when (leftTime.size) {
-                4 -> {
-                    views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[0])
-                }
-                6 -> {
-                    views.setTextViewText(R.id.tv_leftTime_hours, leftTime[0])
-                    views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[2])
-                }
-                8 -> {
-                    if (leftTime[0].toInt() < 10) {
-                        views.setTextViewText(R.id.tv_leftTime_days, "0${leftTime[0]}")
-                    } else {
-                        views.setTextViewText(R.id.tv_leftTime_days, leftTime[0])
+                val views = RemoteViews(context.packageName, R.layout.left_time_for_widget)
+                views.setTextViewText(R.id.tv_widget_title, closestReminder.title)
+                val leftTime = betweenTime.split(" ")
+                when (leftTime.size) {
+                    4 -> {
+                        views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[0])
                     }
-                    views.setTextViewText(R.id.tv_leftTime_hours, leftTime[2])
-                    views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[4])
+                    6 -> {
+                        views.setTextViewText(R.id.tv_leftTime_hours, leftTime[0])
+                        views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[2])
+                    }
+                    8 -> {
+                        if (leftTime[0].toInt() < 10) {
+                            views.setTextViewText(R.id.tv_leftTime_days, "0${leftTime[0]}")
+                        } else {
+                            views.setTextViewText(R.id.tv_leftTime_days, leftTime[0])
+                        }
+                        views.setTextViewText(R.id.tv_leftTime_hours, leftTime[2])
+                        views.setTextViewText(R.id.tv_leftTime_minutes, leftTime[4])
+                    }
                 }
-            }
 
 //        views.setTextViewText(R.id.tv_leftTime_days, closestReminder.time)
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+
+            }
         }
 
         val views = RemoteViews(context.packageName, R.layout.left_time_for_widget)
@@ -151,7 +154,8 @@ class ReminderWidget : AppWidgetProvider(), Time {
         )
         val intent = Intent(context, ReminderWidget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId)
+        val array = intArrayOf(appWidgetId)
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, array)
         context.sendBroadcast(intent)
 
 //    views.setTextViewText(R.id.appwidget_text, widgetText)
@@ -161,7 +165,6 @@ class ReminderWidget : AppWidgetProvider(), Time {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    @DelicateCoroutinesApi
     private fun getPendingSelfIntent(context: Context?, action: String?): PendingIntent? {
         val intent = Intent(context, ReminderWidget::class.java)
         intent.action = action

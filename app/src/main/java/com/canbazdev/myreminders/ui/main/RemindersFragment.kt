@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -22,33 +21,26 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
 import com.canbazdev.myreminders.adapter.ReminderDecoration
 import com.canbazdev.myreminders.adapter.RemindersAdapter
 import com.canbazdev.myreminders.databinding.FragmentRemindersBinding
-import com.canbazdev.myreminders.model.Reminder
 import com.canbazdev.myreminders.ui.base.BaseFragment
+import com.canbazdev.myreminders.util.Constants.CHANNEL_ID
+import com.canbazdev.myreminders.util.Constants.NOTIFICATION_ID
 import com.canbazdev.myreminders.util.enum.Categories
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 
-@DelicateCoroutinesApi
 @AndroidEntryPoint
-class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders),
-    RemindersAdapter.OnItemClickedListener {
+class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragment_reminders) {
 
-    private lateinit var rvReminders: RecyclerView
     private lateinit var remindersAdapter: RemindersAdapter
-    private lateinit var progressBar: ProgressBar
-    private val channelId = "foxandroid"
-    private val notificationId = 101
-    private var todayReminderNumber: Int = 0
+    val viewModel: RemindersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,31 +48,34 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
         savedInstanceState: Bundle?
     ): View? {
 
-
         createNotificationChannel()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressBar = binding.pbLoadingData
-
-        val viewModel: RemindersViewModel by viewModels()
+        remindersAdapter = RemindersAdapter(viewModel)
+        binding.viewModel = viewModel
+        binding.itemDecoration = ReminderDecoration()
+        binding.adapter = remindersAdapter
 //        setAlarm()
 
+        viewModel.goToDetail.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.setGoToDetail()
+                viewModel.currentReminder.observe(viewLifecycleOwner) {
+                    val action =
+                        RemindersFragmentDirections.actionReminderFragmentToDetailReminderFragment(
+                            viewModel.currentReminder.value
+                        )
+                    findNavController().navigate(action)
+                }
 
-        val linearLayoutManager = LinearLayoutManager(requireContext())
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        rvReminders = binding.rvReminders
-        rvReminders.layoutManager = linearLayoutManager
-        rvReminders.addItemDecoration(ReminderDecoration())
 
-        remindersAdapter = RemindersAdapter(this)
-        binding.rvReminders.adapter = remindersAdapter
-
-        binding.fabGoToAddReminder.setOnClickListener {
-            findNavController().navigate(R.id.action_reminderFragment_to_addReminderFragment)
+            }
         }
+
+
 
         binding.tvHelloName.setOnClickListener {
             val layoutInflater = LayoutInflater.from(view.context)
@@ -105,91 +100,33 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
         }
 
+        binding.fabGoToAddReminder.setOnClickListener {
+            goToAddReminderFragment()
+        }
+
         observeReminderList(viewModel)
 
-
-        viewModel.todaysReminderList.observe(viewLifecycleOwner) {
-
-            todayReminderNumber = it.size
-            if (todayReminderNumber != 0) {
-                binding.tvTodayReminderNumbers.text =
-                    String.format(
-                        resources.getString(R.string.today_you_have_x_reminders),
-                        todayReminderNumber
-                    )
-            } else {
-                binding.tvTodayReminderNumbers.text =
-                    resources.getString(R.string.you_have_no_reminders)
-            }
-
-            viewModel.setTodaysReminderCount(todayReminderNumber)
-        }
-        viewModel.todaysRemindersCount.observe(viewLifecycleOwner) {
-            println("countttt $it")
-        }
-
-        viewModel.closestReminderToday.observe(viewLifecycleOwner) { reminder ->
-            if (reminder != null) {
-                val reminderTitleWithCapitalise =
-                    reminder.title.lowercase(Locale.getDefault()).replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(Locale.getDefault())
-                        else it.toString()
-                    }
-                binding.tvTodayReminderTitle.text = reminderTitleWithCapitalise
-                binding.tvTodayReminderTitle.text.toString()
-                binding.tvTodayReminderTime.text = reminder.time
-
-
-//                val appWidgetManager = AppWidgetManager.getInstance(context)
-//                val remoteViews =
-//                    RemoteViews(requireContext().packageName, R.layout.reminder_widget).also {
-//                        it.setTextViewText(R.id.appwidget_text, reminderTitleWithCapitalise)
-//                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
-//                    }
-//                val widgetId = sharedPrefRepository.getWidgetId()
-//                appWidgetManager.partiallyUpdateAppWidget(widgetId, remoteViews)
-
-
-            } else {
-                setTodayReminderVisibility()
-            }
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            if (!it) progressBar.visibility = View.GONE
-        }
-
         setUpSwipeToDeleteReminders(viewModel)
-// datastore
-        viewModel.savedName.observe(viewLifecycleOwner) {
-            binding.tvHelloName.text = String.format(resources.getString(R.string.hello_x), it)
-        }
 
     }
 
-    fun observeReminderList(
+    private fun observeReminderList(
         viewModel: RemindersViewModel
     ) {
         viewModel.reminderList.observe(viewLifecycleOwner) { reminderList ->
-//            sendNotification("MyReminders", "${it.size} adet reminder var", R.drawable.friendship)
+            sendNotification(
+                "MyReminders",
+                "${reminderList.size} adet reminder var",
+                R.drawable.friendship
+            )
             println("reminder list is observing")
             if (reminderList != null && reminderList.isNotEmpty()) {
-
-                binding.rvReminders.visibility = View.VISIBLE
-                binding.noDataFound.visibility = View.GONE
-                viewModel.isLoading.value = false
-                remindersAdapter.setRemindersList(reminderList)
-
-                println("observe all reminders")
-                println(reminderList)
 
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 var flag = 0
                 var index = 0
                 var reminder = reminderList[index]
-//                println("flag $flag index $index")
                 while (flag == 0 && index <= reminderList.size - 1) {
-//                    println("while flag $flag index $index")
 
                     reminder = reminderList[index]
                     val millisecondsBetweenReminderAndNow =
@@ -216,8 +153,6 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                 ).also {
                     val leftTime = viewModel.leftTime.value.toString().split(" ")
 //                    println("left time$leftTime")
-                    // TODO kalan zamani ekle
-                    // TODO reminder yoksa bugün boşsunuz yazdır
                     it.setTextViewText(R.id.tv_leftTime_minutes, "00")
                     it.setTextViewText(R.id.tv_leftTime_hours, "00")
                     it.setTextViewText(R.id.tv_leftTime_days, "00")
@@ -248,33 +183,20 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                     )
 //                        it.setTextViewText(R.id.appwidget_left_time, reminder.time)
                 }
-//                CoroutineScope(Dispatchers.Main.immediate).launch {
-//                    dataStoreRepository.getWidgetId.collect { widgetId ->
-//                        appWidgetManager.updateAppWidget(widgetId, views)
-//                    }
-//
-//                }
+                val widgetId = viewModel.widgetId.value!!
+                println("widget id $widgetId")
+                appWidgetManager.updateAppWidget(widgetId, views)
+
 
             } else {
-                binding.rvReminders.visibility = View.GONE
-                binding.noDataFound.visibility = View.VISIBLE
-                progressBar.visibility = View.GONE
+//                binding.rvReminders.visibility = View.GONE
+//                binding.noDataFound.visibility = View.VISIBLE
+//                progressBar.visibility = View.GONE
             }
         }
 
     }
 
-    private fun setTodayReminderVisibility() {
-        binding.tvTodayReminderTitle.text = resources.getString(R.string.you_are_free)
-        binding.tvTodayReminderTime.text = ""
-
-    }
-
-    override fun onItemClicked(position: Int, reminder: Reminder) {
-        val action =
-            RemindersFragmentDirections.actionReminderFragmentToDetailReminderFragment(reminder)
-        findNavController().navigate(action)
-    }
 
     private fun setUpSwipeToDeleteReminders(viewModel: RemindersViewModel) {
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
@@ -315,7 +237,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                setDeleteIcon(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                setDeleteIcon(c, viewHolder, dX, isCurrentlyActive)
                 super.onChildDraw(
                     c,
                     recyclerView,
@@ -338,11 +260,8 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
     fun setDeleteIcon(
         c: Canvas,
-        recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         dx: Float,
-        dy: Float,
-        actionState: Int,
         isCurrently: Boolean,
     ) {
         val mClearPaint = Paint()
@@ -388,7 +307,7 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
             val name = "Title"
             val descriptionText = "Description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(channelId, name, importance).apply {
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
             val notificationManager: NotificationManager =
@@ -402,35 +321,25 @@ class RemindersFragment : BaseFragment<FragmentRemindersBinding>(R.layout.fragme
 
 
     private fun sendNotification(title: String, text: String, icon: Int) {
-        val builder = NotificationCompat.Builder(requireContext(), channelId)
+        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
             .setSmallIcon(icon)
             .setContentTitle(title)
             .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(requireContext())) {
-            notify(notificationId, builder.build())
+            notify(NOTIFICATION_ID, builder.build())
         }
     }
 
-//    fun setAlarm() {
-//        val calendar = Calendar.getInstance()
-//        if (Calendar.getInstance()[Calendar.HOUR_OF_DAY] > 9) {
-//            calendar.add(Calendar.DAY_OF_YEAR, 1) // add, not set!
-//        }
-//        calendar[Calendar.HOUR_OF_DAY] = 8
-//        calendar[Calendar.MINUTE] = 0
-//        calendar[Calendar.SECOND] = 0
-//
-//        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val intent = Intent(requireContext(), AlarmReceiver::class.java)
-//        // TODO intent ile bildirimde gösterilecek şeyleri gönder
-//        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, 0)
-//        alarmManager.setRepeating(
-//            AlarmManager.RTC_WAKEUP, (calendar.timeInMillis),
-//            AlarmManager.INTERVAL_DAY, pendingIntent
-//        )
-//        Toast.makeText(context, "Alarm set Successfully", Toast.LENGTH_SHORT).show()
+//    override fun onItemClicked(position: Int, reminder: Reminder) {
+//        val action =
+//            RemindersFragmentDirections.actionReminderFragmentToDetailReminderFragment(reminder)
+//        findNavController().navigate(action)
 //    }
+
+    private fun goToAddReminderFragment() {
+        findNavController().navigate(R.id.action_reminderFragment_to_addReminderFragment)
+    }
 
 }

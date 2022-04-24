@@ -7,11 +7,8 @@
 
         <variable
             name="viewModel"
-            type="com.canbazdev.myreminders.ui.main.RemindersViewModel" />
+            type="com.canbazdev.myreminders.ui.detail_reminder.DetailReminderViewModel" />
 
-        <variable
-            name="reminder"
-            type="com.canbazdev.myreminders.model.Reminder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,13 +63,15 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_title"
+                isEnabled="@{viewModel.isEventEnded()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:afterTextChanged="@{viewModel.updateReminderTitle}"
                 android:fontFamily="@font/shippori"
                 android:gravity="center_vertical"
                 android:hint="@string/add_reminder_title"
                 android:inputType="textVisiblePassword"
-                android:text="@={reminder.title}"
+                android:text="@{viewModel.reminderTitle}"
                 android:textColor="@color/hint_color"
                 android:textSize="@dimen/sp20" />
 
@@ -110,10 +109,11 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_days"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/_0"
+                android:text="@{viewModel.tvLeftTimeDays}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -123,10 +123,11 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_hours"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/_00"
+                android:text="@{viewModel.tvLeftTimeHours}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -136,10 +137,11 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_minutes"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/_00"
+                android:text="@{viewModel.tvLeftTimeMinutes}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -149,10 +151,11 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_seconds"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/_00"
+                android:text="@{viewModel.tvLeftTimeSeconds}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp32"
                 android:textStyle="bold"
@@ -162,6 +165,7 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_days_text"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Days"
@@ -175,6 +179,7 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_hours_text"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Hours"
@@ -188,6 +193,7 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_minutes_text"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/minutes"
@@ -201,6 +207,7 @@
 
             <TextView
                 android:id="@+id/tv_leftTime_seconds_text"
+                isVisible="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/seconds"
@@ -237,6 +244,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btn_select_date"
+                isEnabled="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -251,7 +259,7 @@
                     android:layout_marginStart="@dimen/margin_8dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="@string/_08"
+                    android:text="@{viewModel.showDay}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -264,7 +272,7 @@
                     android:layout_marginStart="@dimen/margin_6dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="@string/test_date"
+                    android:text="@{viewModel.showMonth}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_date_day"
@@ -275,6 +283,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btn_select_time"
+                isEnabled="@{viewModel.isEventEnded()}"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -287,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik2"
-                    android:text="@string/_00"
+                    android:text="@{viewModel.displayedHour}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -316,7 +325,7 @@
                     android:layout_marginStart="@dimen/margin_2dp"
                     android:fontFamily="@font/rubik2"
                     android:gravity="center"
-                    android:text="@string/_00"
+                    android:text="@{viewModel.displayedMinutes}"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -329,11 +338,13 @@
 
         <Button
             android:id="@+id/btnSaveReminder"
+            isEnabled="@{viewModel.isEventEnded()}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_24dp"
             android:layout_marginEnd="@dimen/margin_24dp"
             android:layout_marginBottom="@dimen/margin_24dp"
+            android:onClick="@{() -> viewModel.updateReminder()}"
             android:text="@string/update"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -379,7 +390,7 @@
             android:layout_marginTop="@dimen/margin_48dp"
             android:layout_marginEnd="160dp"
             android:contentDescription="@string/category_photo"
-            android:src="@drawable/family"
+            android:imageUrl="@{viewModel.categoryIcon}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_date_picker" />

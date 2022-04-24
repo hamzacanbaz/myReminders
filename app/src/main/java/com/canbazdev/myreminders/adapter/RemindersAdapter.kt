@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.canbazdev.myreminders.R
+import com.canbazdev.myreminders.data.model.Reminder
 import com.canbazdev.myreminders.databinding.ItemReminderBinding
-import com.canbazdev.myreminders.model.Reminder
 import com.canbazdev.myreminders.util.enum.Categories
 import com.canbazdev.myreminders.util.enum.Months
 import java.util.*
@@ -88,8 +88,6 @@ class RemindersAdapter(
         return ReminderViewHolder(binding)
     }
 
-//    override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-//    }
 
     override fun getItemCount(): Int {
         return remindersList.size
